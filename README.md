@@ -15,7 +15,7 @@ before/after surgery photos.
 One rule: **no number in the paper is typed by hand.** Everything comes out of
 the experiment run data:
 
-```
+```text
 outputs/runs/*/results.csv  (experiment repo)
         │
         ▼
@@ -28,13 +28,8 @@ scripts/make_qualitative.py ► figures/generated/*.png  before/after image grid
 ```
 
 If a result changes, re-run the scripts and the paper updates itself. Editing a
-number in a `.tex` file under `tables/` is always the wrong move — it gets
+number in a `.tex` file under `tables/` is always the wrong move - it gets
 overwritten.
-
-The scripts expect the experiment repo at
-`c:\Users\admin\source\repos\plastyvue-poc`; set `PLASTYVUE_POC` to point
-somewhere else. Generated tables and figures are committed, so you can build the
-PDF without the experiment data.
 
 ## Building
 
@@ -49,21 +44,3 @@ make all        # all of the above
 ```
 
 Or skip Python entirely and just run `make pdf` with the committed artifacts.
-
-### Overleaf
-
-Upload the repo as a zip (`git archive -o paper.zip HEAD`), or connect it via
-Overleaf's GitHub import. Compiler: pdfLaTeX, main file: `main.tex`. Overleaf
-ignores the Python; the committed tables/figures make it compile as-is.
-
-## Before submitting
-
-Open items live in two places:
-
-- `docs/real_face_checklist.md` — the face photos are from licensed before/after
-  datasets; the final attribution wording still needs to be filled in.
-- `refs.bib` — entries marked `UNVERIFIED` need their author lists / venues
-  checked against the publisher pages.
-
-`docs/novelty_notes.md` has the prior-work scan and the claims we deliberately
-avoid making — read it before touching the intro or related-work sections.

@@ -22,10 +22,10 @@ synthetic faces only.
 
 | Source | License/terms | Publication OK? | Attribution required | Date checked |
 |--------|---------------|-----------------|----------------------|--------------|
-| real facelift before/after dataset (2026-06-22) | confirmed by dataset licensee (repo owner) | Yes | **TBD — owner to supply exact attribution wording before submission** | 2026-07-16 |
-| real rhinoplasty before/after dataset (2026-06-30) | confirmed by dataset licensee (repo owner) | Yes | **TBD — owner to supply exact attribution wording before submission** | 2026-07-16 |
+| real facelift before/after dataset (2026-06-22) | confirmed by dataset licensee (repo owner) | Yes | **TBD - owner to supply exact attribution wording before submission** | 2026-07-16 |
+| real rhinoplasty before/after dataset (2026-06-30) | confirmed by dataset licensee (repo owner) | Yes | **TBD - owner to supply exact attribution wording before submission** | 2026-07-16 |
 
 Decision recorded from the owner's confirmation on 2026-07-16 that the datasets'
 license permits reproduction in an academic paper. Open item: the exact source
 name/URL and required attribution line are still needed for the ethics section
-and figure captions — collect before submission.
+and figure captions - collect before submission.

@@ -11,7 +11,7 @@ in refs.bib.
 hosted/black-box commercial image-edit APIs + client-side region confinement +
 surgical preview. But the claims must be scoped carefully (see "Claims to avoid").
 
-**Critical near-neighbor — must cite and answer: Envisage** (`agarwal2026envisage`,
+**Critical near-neighbor - must cite and answer: Envisage** (`agarwal2026envisage`,
 arXiv:2606.28628, June 26 2026). Rhinoplasty goal visualization: FLUX.1-Fill inpainting
 + MediaPipe masks + hard compositing + clinical presets; "SurgicalScore" masked
 evaluation (masked LPIPS, edit direction, outside-mask preservation). Differences we
@@ -53,26 +53,26 @@ Not addressing this invites a direct rebuttal.
   manual-morphing practice we automate.
 - `stephanian2024fpsamreview` (FPSAM 2024): systematic review of AI in facial aesthetic surgery.
 
-**(c) Training-free localized editing — all require model internals; hosted APIs expose none.**
+**(c) Training-free localized editing - all require model internals; hosted APIs expose none.**
 This is the cleanest argument for the masked_composite rung:
 - Sampling-loop access: `meng2022sdedit`, `lugmayr2022repaint`, `couairon2023diffedit`
 - Per-step latent blending: `avrahami2022blended`, `avrahami2023blendedlatent`
 - Attention/feature access: `hertz2023prompt2prompt`, `tumanyan2023plugandplay`
 Frame masked_composite as a post-hoc, model-agnostic analogue of blended compositing
-that needs no internals and no mask parameter — NOT a new editing algorithm.
+that needs no internals and no mask parameter - NOT a new editing algorithm.
 
-**(d) Editing benchmarks (hosted-API benchmarking is now common — scope claims by domain)**
+**(d) Editing benchmarks (hosted-API benchmarking is now common - scope claims by domain)**
 - `qian2025giebench`: object-aware masked preservation scoring; finds GPT-Image-1
   "over-edits irrelevant regions". Closest eval-side neighbor; general-domain, no
   identity/clinical dimension. Cite as precedent for off-target measurement.
-- `alebench2024`: target-external/internal leakage metrics — same, CLIP-based, general.
+- `alebench2024`: target-external/internal leakage metrics - same, CLIP-based, general.
 - `gptimgeval2025`, PhyEditBench (arXiv:2606.26551): hosted models benchmarked in other
-  domains — avoid any "first to benchmark commercial editors" claim.
+  domains - avoid any "first to benchmark commercial editors" claim.
 - `zhang2023magicbrush`, `wang2023editbench`, `sheynin2024emuedit`, `ku2024imagenhub`,
   `ma2024i2ebench`, `hui2025hqedit`, `liu2025step1xedit`: general-domain benchmarks/datasets.
 
 **(e) Identity metrics**: ArcFace cosine is standard practice (e.g. FED-Bench
-arXiv:2603.29697 validates it against human identity judgment) — the metric itself is
+arXiv:2603.29697 validates it against human identity judgment) - the metric itself is
 NOT a contribution; the pairing with the localization ratio and per-rung reporting is.
 
 **(f) Critical overlap check**: no academic work combines hosted APIs + region
