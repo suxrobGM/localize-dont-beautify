@@ -1,5 +1,46 @@
 \section{Experimental Setup}
-% Models table (tables/setup_models.tex); data table from manifest; Cartesian bake-off
-% (faces x models x procedures x controls), fixed seed; provenance (git sha, run configs);
-% cost/latency; one sentence on the FLUX.2 exclusion.
-\todo{experimental setup}
+\label{sec:setup}
+
+\begin{table}[t]
+  \centering
+  \caption{Models in the study. Hosted models run behind fal.ai endpoints; cost is
+  the provider's per-image estimate at the pinned date.}
+  \label{tab:models}
+  \resizebox{\columnwidth}{!}{\input{tables/setup_models}}
+\end{table}
+
+\textbf{Models.} Table~\ref{tab:models} lists the lineup: OpenAI GPT Image~2 at two
+quality tiers~\cite{openai2026gptimage2}, Google's Nano Banana~Pro and Nano
+Banana~2~\cite{google2025nanobananapro,google2025nanobanana}, ByteDance
+Seedream~5.0~\cite{seedream5_2026,seedream4_2025}, and Qwen-Image-Edit both as a
+hosted inpainting endpoint and as a locally served open-weight
+model~\cite{wu2025qwenimage}. The quantitative results cover the four models with
+scored cells (GPT Image~2 at both tiers, Seedream~5.0, and the hosted Qwen
+inpainter); the local model is reserved for a privacy-sensitive deployment track.
+FLUX.2~\cite{bfl2025fluxkontext} was dropped from the lineup after losing pilot
+quality comparisons. Hosted models are moving targets, so every run records its
+date and the exact endpoint identifier.
+
+\textbf{Data.} The test set contains real, licensed before/after photograph pairs:
+13 frontal deep-plane-facelift inputs (12 with a paired post-operative photograph)
+and 14 rhinoplasty inputs (10 profile views and 4 frontal cross-views, all with
+post-operative pairs). Images are normalized to $1024^2$ with padding. The
+datasets are licensed for AI use and republication; no private patient data was
+used at any point. Synthetic candidate faces were piloted early in the project and
+abandoned for quality reasons, so all results below are on real faces.
+
+\textbf{Protocol.} Runs expand a Cartesian matrix of faces $\times$ models
+$\times$ procedures $\times$ controls with a fixed seed, so every cell exists and
+none can be quietly dropped: the gallery renderer shows the full grid, and model
+failures are recorded in the results table rather than raised. Each run directory
+is immutable and stores the resolved configuration and the git commit that produced
+it; output filenames encode the full cell key, which is also the join key for
+scoring. Generation and scoring are decoupled, so metrics can be recomputed without
+touching images. A final experiment chains two procedures on the same face in both
+orders (rhinoplasty then facelift, and the reverse) to test whether region-confined
+stages compose. Across all scored edits the median latency is \MedLatency{}\,s and
+the median cost \$\MedCost{} per image.
+
+The paper itself is generated from this provenance: every number in the text and
+tables is produced by an aggregation script from the run records, with duplicate
+cells resolved by keeping the most completely scored row.

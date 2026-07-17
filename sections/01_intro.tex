@@ -1,4 +1,70 @@
 \section{Introduction}
-% Expectation-management problem; can hosted image-edit APIs do surgical previews;
-% contributions bullets; Fig. 1 teaser triptych (before / prompt-only / masked composite).
-\todo{introduction}
+\label{sec:intro}
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.88\textwidth]{teaser_triptych.png}
+  \caption{A deep-plane-facelift preview from a single photograph (GPT Image~2).
+  The prompt-only edit (center) changes the whole image; the masked composite
+  (right) confines the same model's edit to the jaw--neck region, leaving every
+  other pixel identical to the input.}
+  \label{fig:teaser}
+\end{figure*}
+
+Surgeons have shown patients simulated outcomes for decades because it works:
+computer imaging improves rhinoplasty patient
+satisfaction~\cite{sharp2002computerimaging}, and how closely a 3D simulation
+matches the eventual outcome predicts how satisfied the patient will
+be~\cite{yamamichi2025crisalix}. The same literature warns that an over-idealized
+preview sets expectations no operation can meet~\cite{agarwal2007morph}. Producing
+these previews today requires either manual morphing skill or dedicated 3D
+systems; meanwhile, general-purpose image-editing models served over public APIs
+have become strikingly good at instruction-following photo edits. It is natural to
+ask whether a clinic-quality preview is now one API call away.
+
+It is not, and the reason is instructive. Asked for a specific anatomical
+change---a deep-plane facelift's jawline and neck repositioning, a dorsal hump
+reduction---hosted editors return something subtly different: a flattering
+overall rendition of the face, with smoothed skin and brightened features. The
+edit lands everywhere. For a surgical preview this is a double failure. It
+misrepresents the person (identity drift), and it misrepresents the operation,
+showing changes no scalpel would make (a beauty filter). The training-free
+localization literature knows how to confine
+edits~\cite{avrahami2022blended,couairon2023diffedit}, but every such method needs
+the model's latents, attention, or sampling loop, and a hosted API exposes none of
+them.
+
+We ask how far client-side control can carry instead, and how to measure whether
+it worked. Concretely, we benchmark four hosted editors (GPT Image~2 at two
+quality tiers, Seedream~5.0, and a Qwen inpainting endpoint) on three facial
+procedures---deep plane facelift, rhinoplasty, blepharoplasty---using real,
+licensed before/after photograph pairs, under a fixed seed and a full
+experimental matrix. Our contributions:
+
+\begin{itemize}
+  \item \textbf{A model-agnostic control ladder.} Three rungs over the same
+  black-box endpoints: prompt-only, a client-side masked composite
+  (landmark-derived region masks, alignment, feathered blending, pose gating),
+  and native masked inpainting where supported. The composite adapts the final
+  step of blended-diffusion editing to a setting where nothing inside the model
+  is reachable (Sec.~\ref{sec:method}).
+  \item \textbf{A dual-failure-mode evaluation protocol.} ArcFace identity paired
+  with a CIELAB region-localization ratio that separately catches identity drift,
+  off-target beautification, and deceptive near-copies, plus a sanity check
+  against real post-operative photographs and a released surgeon rubric
+  (Sec.~\ref{sec:protocol}).
+  \item \textbf{Benchmark findings.} Masked compositing pins edit localization at
+  a median of \MedLocComposite{} across models where prompt-only control reaches
+  \MedLocPromptOnly{}; identity stays above the $0.6$ floor everywhere; the
+  mask-accepting endpoint paradoxically under-edits (localization
+  \MedLocInpaint); and two-procedure chains compose in either order
+  (Sec.~\ref{sec:results}).
+\end{itemize}
+
+To our knowledge this is the first controlled benchmark of off-the-shelf hosted
+image-editing APIs for identity-preserving surgical previews across multiple
+procedures. The claim is deliberately scoped: bespoke surgical simulators
+exist~\cite{knoedler2024rhinoplastygan,agarwal2026envisage}, and hosted editors
+have been benchmarked in other domains~\cite{qian2025giebench,gptimgeval2025};
+the combination---black-box APIs, client-side region confinement, clinical ground
+truth---is the gap this paper fills (Sec.~\ref{sec:related}).

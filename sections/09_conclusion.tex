@@ -1,4 +1,15 @@
 \section{Conclusion}
-% Go/no-go synthesis: masked compositing is the viable path; inpaint-capable models
-% next; expert-rubric study is the gating next step.
-\todo{conclusion}
+\label{sec:conclusion}
+
+Off-the-shelf hosted image editors cannot yet be trusted to confine a surgical
+edit on their own---prompt-only control leaks half the change off-target, and the
+one mask-accepting endpoint we tested under-edits---but they do not need to be.
+A landmark-derived mask, an alignment step, and a feathered composite on the
+client turn the same endpoints into region-confined preview editors with
+localization near 1 and identity comfortably above the acceptance floor, at a
+median cost of \$\MedCost{} per image. That combination, not any single model, is
+the finding: the capability gap is in control, and control can live outside the
+model. The gating next step is clinical rather than technical---collecting
+surgeon scores under the released rubric---alongside inpaint-capable endpoints
+that actually edit, pose-robust masking for profile views, and a demographically
+stratified test set.

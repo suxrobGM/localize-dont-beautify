@@ -121,8 +121,11 @@ def write_setup_models() -> None:
 
 
 def write_numbers(df: pd.DataFrame, n_runs_total: int, n_runs_scored: int) -> None:
-    comp = df[df.control == "masked_composite"]
-    prom = df[df.control == "prompt_only"]
+    chained = df[df.procedure.str.contains("_then_")]
+    single = df[~df.procedure.str.contains("_then_")]
+    comp = single[single.control == "masked_composite"]
+    prom = single[single.control == "prompt_only"]
+    inp = single[single.control == "masked_inpaint"]
     gt = df.gt_identity_cosine.dropna()
 
     def m(name, value):
@@ -144,9 +147,26 @@ def write_numbers(df: pd.DataFrame, n_runs_total: int, n_runs_scored: int) -> No
     out += m("MedIdentityPromptOnly", fmt(prom.identity_cosine.median()))
     out += m("IdentityMinAll", fmt(df.identity_cosine.min()))
     out += m("IdentityMaxAll", fmt(df.identity_cosine.max()))
+    out += m("MedLocInpaint", fmt(inp.change_localization.median()))
+    out += m("LocInpaintMin", fmt(inp.change_localization.min()))
+    out += m("LocInpaintMax", fmt(inp.change_localization.max()))
+    out += m("MedIdentityInpaint", fmt(inp.identity_cosine.median()))
+    out += m("MedTgtComposite", fmt(comp.change_target.median(), 1))
+    out += m("MedOffComposite", fmt(comp.change_offtarget.median(), 2))
+    out += m("MedTgtPromptOnly", fmt(prom.change_target.median(), 1))
+    out += m("MedOffPromptOnly", fmt(prom.change_offtarget.median(), 2))
+    out += m("MedTgtInpaint", fmt(inp.change_target.median(), 1))
+    out += m("MedOffInpaint", fmt(inp.change_offtarget.median(), 2))
+    out += m("NumChained", len(chained))
+    out += m("ChainedIdentityLow", fmt(chained.identity_cosine.min()))
+    out += m("ChainedIdentityHigh", fmt(chained.identity_cosine.max()))
+    out += m("ChainedLocLow", fmt(chained.change_localization.min()))
+    out += m("ChainedLocHigh", fmt(chained.change_localization.max()))
     out += m("MedGtCosine", fmt(gt.median()))
     out += m("GtCosineMin", fmt(gt.min()))
     out += m("GtCosineMax", fmt(gt.max()))
+    out += m("MedGtCosineFacelift", fmt(df[df.procedure == "deep_plane_facelift"].gt_identity_cosine.dropna().median()))
+    out += m("MedGtCosineRhino", fmt(df[df.procedure == "rhinoplasty"].gt_identity_cosine.dropna().median()))
     out += m("MedLatency", fmt(df.latency_s.median(), 0))
     out += m("MedCost", fmt(df.cost_estimate_usd.median(), 3))
     (TABLES_DIR / "numbers.tex").write_text(out, encoding="utf-8")

@@ -1,5 +1,128 @@
 \section{Results}
-% Table 1 (tables/main_results.tex); Fig. 3 identity-vs-localization scatter;
-% Fig. 4 boxplots; Fig. 5 qualitative grid; chained procedures; failure modes.
-% All numbers via macros from tables/numbers.tex - nothing hand-typed.
-\todo{results}
+\label{sec:results}
+
+\begin{table*}[t]
+  \centering
+  \caption{Main results over \NumScoredEdits{} scored edits (\NumFacesScored{}
+  faces, \NumRunsScored{} runs). Medians per cell; identity shows min--max in
+  parentheses. Loc.\ is the localization ratio; $\Delta E_{\mathrm{tgt}}$ the mean
+  CIELAB change inside the target region. Chained rows are single-face
+  order-effect probes, not population estimates.}
+  \label{tab:main}
+  \input{tables/main_results}
+\end{table*}
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{scatter_identity_localization}
+  \caption{Every scored edit, placed by the two failure modes. Masked compositing
+  pins localization near 1 across models; prompt-only edits and the hosted
+  inpainter leak roughly half their change off-target. All edits clear the
+  identity floor.}
+  \label{fig:scatter}
+\end{figure}
+
+Table~\ref{tab:main} and Fig.~\ref{fig:scatter} summarize the \NumScoredEdits{}
+scored edits. We report medians and ranges throughout and make no statistical
+significance claims at this sample size.
+
+\subsection{Localization: the ladder works}
+
+Masked compositing drives the localization ratio to a median of
+\MedLocComposite{} (range \LocCompositeMin--\LocCompositeMax) regardless of which
+model produced the edit. The same models under prompt-only control reach only
+\MedLocPromptOnly{} (\LocPromptOnlyMin--\LocPromptOnlyMax): roughly half of the
+measured change lands outside the surgical region, which is the beauty-filter
+signature the metric was built to expose. The off-target numbers make the contrast
+concrete---a median $\Delta E_{\mathrm{off}}$ of \MedOffPromptOnly{} for
+prompt-only edits against \MedOffComposite{} for composited ones---while the
+on-target change stays substantial (median $\Delta E_{\mathrm{tgt}}$
+\MedTgtComposite{} composited vs.\ \MedTgtPromptOnly{} prompt-only). Prompt
+guardrails alone, however carefully worded, did not confine the edit; moving the
+confinement outside the model did.
+
+\subsection{Identity}
+
+Every scored edit clears the $0.6$ identity floor (minimum \IdentityMinAll{},
+maximum \IdentityMaxAll). Following Sec.~\ref{sec:protocol}, the model-level
+number is the prompt-only median of \MedIdentityPromptOnly{}: even without
+compositing, current editors hold identity well above the floor on these faces.
+Composited edits score a median of \MedIdentityComposite{}, but part of that is
+copied pixels, so we do not read the difference as a model improvement.
+Fig.~\ref{fig:boxes} breaks identity out by model; the ordering is consistent with
+each model's editing aggressiveness rather than with output quality.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.92\textwidth]{box_localization_identity}
+  \caption{(a) Localization by control rung, models pooled. (b) Identity by model,
+  controls pooled; the dashed line is the acceptance floor. The hosted inpainter's
+  near-perfect identity in (b) reflects under-editing, not superior preservation
+  (see Sec.~\ref{sec:inpaint}).}
+  \label{fig:boxes}
+\end{figure*}
+
+\subsection{Hosted inpainting under-edits}
+\label{sec:inpaint}
+
+The masked-inpaint rung was expected to dominate: the endpoint receives the mask
+explicitly and should confine the edit for free. Instead it shows the protocol's
+other failure mode. Its identity median of \MedIdentityInpaint{} is the highest in
+the study, but its median target change is only \MedTgtInpaint{}---barely above
+its off-target change of \MedOffInpaint{}, for a localization of just
+\MedLocInpaint{} (\LocInpaintMin--\LocInpaintMax). The edit inside the mask is
+timid, and the returned image differs slightly everywhere, consistent with a
+full-image re-encode by the endpoint. Read jointly, the numbers say the hosted
+inpainter mostly returned the input: exactly the deceptive near-copy the
+did-nothing trap describes. At the tested endpoint, sending the mask to the model
+was worse than ignoring the model's mask support entirely and compositing on the
+client.
+
+\subsection{Ground-truth sanity check}
+
+Against real post-operative photographs the edits score a median cosine of
+\MedGtCosine{} (range \GtCosineMin--\GtCosineMax; facelift
+\MedGtCosineFacelift{}, rhinoplasty \MedGtCosineRhino), shown in
+Fig.~\ref{fig:gt}. The values sit where same-person photographs taken months apart
+under different pose, makeup, and hair typically land, which is all this check can
+certify: the previews are not drifting toward a different person than the one the
+surgery actually produced.
+
+\begin{figure}[t]
+  \centering
+  \includegraphics[width=\columnwidth]{strip_gt_cosine}
+  \caption{ArcFace cosine between each edit and the face's real post-operative
+  photograph (bars: medians). A soft sanity check; session differences cap the
+  achievable score.}
+  \label{fig:gt}
+\end{figure}
+
+\subsection{Chained procedures}
+
+Chaining rhinoplasty and the facelift on the same face works in both orders:
+identity \ChainedIdentityLow--\ChainedIdentityHigh{} and localization
+\ChainedLocLow--\ChainedLocHigh{} for the two orderings ($n=\NumChained$), with no
+visible interference between the nose and jaw--neck regions. Because the regions
+are disjoint, each composited stage protects the other stage's canvas; order
+appears to be a free parameter, though two probes on one face only establish
+feasibility.
+
+\subsection{Qualitative results and failure modes}
+
+Fig.~\ref{fig:teaser} and Fig.~\ref{fig:grid} show representative edits. The
+facelift examples display the intended tissue repositioning---jawline definition,
+reduced jowls, a cleaner cervicomental angle---while skin texture, lighting, and
+background survive untouched in the composited column. The characteristic failure
+we observed before pose gating was the ghost seam: on profile views the
+frontal-mesh mask landed on the cheek and composited a translucent copy of the
+nose into it. Gating on yaw removed the artifact at the cost of leaving profile
+inputs uncomposited, an honest gap that Sec.~\ref{sec:limitations} counts.
+
+\begin{figure*}[t]
+  \centering
+  \includegraphics[width=0.88\textwidth]{qualitative_grid.png}
+  \caption{Qualitative results (top to bottom: two deep-plane-facelift faces, one
+  frontal rhinoplasty face). Prompt-only edits alter the whole image; composited
+  edits are pixel-identical to the input outside the region.}
+  \label{fig:grid}
+\end{figure*}

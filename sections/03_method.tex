@@ -1,7 +1,90 @@
 \section{Method}
-% 3.1 control ladder (prompt-only -> masked composite -> masked inpaint)
-% 3.2 two-tier landmarks + procedure->region masks
-% 3.3 masked composite: align, feather, pose gating (yaw > 0.35)
-% 3.4 prompt guardrails (surgical, not beauty-filter)
-% Fig. 2: pipeline figure from run intermediates.
-\todo{method}
+\label{sec:method}
+
+We treat each editing model as a black box behind a hosted endpoint: it accepts an
+image and a text instruction and returns an edited image. No weights, latents,
+attention maps, or sampling loop are exposed, so the training-free localization
+methods surveyed in Sec.~\ref{sec:related} do not apply. Everything we add runs on
+the client, before the request or after the response.
+
+\subsection{The control ladder}
+\label{sec:ladder}
+
+A procedure specification consists of a target region $r$ (the facelift edits the
+jaw and neck, rhinoplasty the nose, blepharoplasty the eyelids), a positive
+instruction describing the anatomical change, and a negative prompt. We compare
+three rungs of increasing client-side control, holding faces, models, prompts, and
+seeds fixed:
+
+\begin{itemize}
+  \item \textbf{Prompt only.} The photo and instruction go to the endpoint
+  unmodified and the response is used as-is. This measures what the model does when
+  asked, politely but firmly, to edit one region.
+  \item \textbf{Masked composite.} The endpoint still edits the whole image, but we
+  discard everything outside $r$: the response is aligned back onto the input and
+  composited through a feathered region mask (Sec.~\ref{sec:composite}), so pixels
+  outside the mask remain identical to the input by construction.
+  \item \textbf{Masked inpaint.} For endpoints that accept an explicit mask, we send
+  the region mask with the request and let the model inpaint inside it.
+\end{itemize}
+
+The ladder is the experimental variable, not a new editing algorithm: pixel-space
+blending is the final step of Blended Diffusion~\cite{avrahami2022blended} and of
+Envisage's hard composite~\cite{agarwal2026envisage}. What we study is how much of
+the localized-editing problem this post-hoc adaptation solves when nothing inside
+the model can be touched.
+
+\subsection{Landmarks and region masks}
+\label{sec:masks}
+
+Region masks derive from MediaPipe's 478-point face
+mesh~\cite{lugaresi2019mediapipe,grishchenko2020attentionmesh}. Each region is the
+convex hull of a landmark subset: the face splits at the lower-eyelid line into an
+upper-face zone (forehead, brows, eyes---which a facelift must not change) and a
+jaw--neck zone (cheeks, nasolabial folds, jowls, jawline, chin). The mesh has no
+neck landmarks, so the jaw--neck hull extends below the chin by a fixed fraction of
+face height. The nose region is a perimeter hull dilated by a margin proportional
+to the inter-ocular distance, which also scales every feather and erosion radius so
+the masks are resolution-independent.
+
+MediaPipe finds no face on true profile views. For the nose region we fall back to
+InsightFace's SCRFD detector with its 106-point landmark
+set~\cite{guo2022scrfd}, scaled by the detection box; the remaining regions are
+defined only by the frontal mesh and are pose-gated instead (below).
+
+\subsection{Masked compositing and pose gating}
+\label{sec:composite}
+
+Hosted editors routinely shift, rescale, or re-crop the head, so pasting the raw
+response through a mask produces double contours. We first align the edited image
+onto the input with a similarity warp estimated from stable landmark anchors, then
+blend: $\mathrm{out} = x\,(1-w) + e\,w$, where $x$ is the input, $e$ the aligned
+edit, and $w$ a per-pixel weight from the feathered mask.
+
+The composite mask is shaped so its boundary never crosses visually busy texture.
+Relative to the metric region it is eroded off the face silhouette, clipped medial
+of the ears so the seam avoids the sideburns, extended further down the neck so a
+narrowed jawline blends into shadow or clothing, and feathered with a wide
+smoothstep ramp over the signed distance to the mask boundary rather than a
+Gaussian blur. All widths are inter-ocular fractions.
+
+Compositing is skipped when the estimated yaw exceeds $0.35$. In early profile
+rhinoplasty runs the frontal-only hulls landed on the wrong part of the face and
+pasted a translucent ``ghost nose'' onto the cheek; gating on pose returns the
+unmodified edit for those inputs rather than a corrupted one.
+
+\subsection{Prompt guardrails}
+\label{sec:guardrails}
+
+The dominant failure mode we observed is not refusal but \emph{generic
+beautification}: smoothed skin, brightened teeth, subtly enlarged eyes---a beauty
+filter where a surgical result was requested. Every request therefore carries three
+fixed prompt fragments in addition to the procedure text. A negative fragment lists
+the beautification behaviors to avoid (``beauty filter, skin smoothing,
+airbrushing, wrinkle removal, \ldots{} different person, identity change, face
+swap''), a positive fragment anchors realism and framing (``photorealistic, same
+person, identity preserved, natural skin texture, identical camera framing''), and
+an intensity fragment scopes the change to anatomy (``change only facial tissue and
+contour; keep skin tone, color, exposure, and lighting identical to the input'').
+The prompts ask for a decisive anatomical correction precisely because the
+evaluation punishes both timid edits and global ones (Sec.~\ref{sec:protocol}).

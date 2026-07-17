@@ -5,6 +5,10 @@ Palette: three categorical slots validated with the dataviz checker on white
 or direct labels). Text/ink tokens stay neutral; series color marks identity only.
 """
 
+import os
+
+os.environ.setdefault("SOURCE_DATE_EPOCH", "0")  # reproducible PDF metadata
+
 import matplotlib.pyplot as plt
 import pandas as pd
 

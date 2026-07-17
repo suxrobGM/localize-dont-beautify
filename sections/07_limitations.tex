@@ -1,4 +1,17 @@
 \section{Limitations}
-% Small n (medians + ranges, no significance claims); demographic buckets unrecorded;
-% noisy ground-truth cosine; no expert scores yet; hosted-model version drift.
-\todo{limitations}
+\label{sec:limitations}
+
+The study is small: \NumScoredEdits{} scored edits over \NumFacesScored{} faces,
+with some model--procedure cells holding under ten samples and the chained
+experiment probing a single face. We therefore report medians and ranges only and
+draw no significance conclusions. The regional-change metric abstains on
+non-frontal inputs, so the profile half of the rhinoplasty set contributes
+identity and ground-truth scores but no localization evidence---precisely the
+poses where rhinoplasty previews matter most clinically. The demographic
+composition of the test set was not recorded, so nothing here speaks to performance
+across skin tones, ages, or sexes; commercial face pipelines have documented gaps
+of exactly that kind~\cite{buolamwini2018gendershades}. The expert rubric shipped
+with the protocol has no collected scores yet, so clinical plausibility rests on
+the automated metrics and the reader's own eyes. Finally, the models under test
+are hosted services that change without notice; the pinned endpoints and run dates
+make the study auditable but not permanently reproducible.

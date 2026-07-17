@@ -1,5 +1,64 @@
 \section{Evaluation Protocol}
-% Identity cosine (ArcFace); regional change: Delta E76 in target vs off-target regions,
-% localization = t/(t+o); ground-truth cosine as soft sanity check; acceptance bar
-% identity >= 0.6; 7-axis expert rubric presented as protocol (explicitly unscored).
-\todo{evaluation protocol}
+\label{sec:protocol}
+
+A surgical preview fails in two opposite ways. It can change too much of the wrong
+thing---drifting identity or beautifying the whole face---or it can change too
+little of the right thing, returning a near-copy that scores deceptively well on
+similarity metrics. Our protocol measures both directions at once.
+
+\subsection{Identity}
+
+We compute the cosine similarity between ArcFace~\cite{deng2019arcface} embeddings
+of the largest detected face in the input and in the edit, and adopt $0.6$ as the
+acceptance floor. Two caveats govern its reading. First, a very high score can mean
+the model simply did not perform the edit; identity is never interpreted without
+the regional-change scores below. Second, as Agarwal and
+Bhrany~\cite{agarwal2026envisage} point out, any identity score computed on a
+composited output partially measures pixels that were copied from the input by
+construction. We therefore treat identity on the prompt-only rung as the
+\emph{model-level} measurement and identity on composited rungs as a
+\emph{system-level} property, and we lean on the localization metric---which looks
+inside and outside the mask separately---for the claims compositing actually makes.
+
+\subsection{Regional change and localization}
+
+After aligning the edit onto the input, we convert both to CIELAB and take the mean
+$\Delta E_{76}$ color difference inside the procedure's target region
+($\Delta E_{\mathrm{tgt}}$) and inside a disjoint off-target keep zone
+($\Delta E_{\mathrm{off}}$, the upper-face region minus the target). At the
+magnitudes involved the refinements of CIEDE2000~\cite{sharma2005ciede2000} do not
+change the ordering, so we keep the simpler formula. The summary statistic is the
+localization ratio
+\[
+  \mathrm{loc} = \frac{\Delta E_{\mathrm{tgt}}}
+                      {\Delta E_{\mathrm{tgt}} + \Delta E_{\mathrm{off}}},
+\]
+read jointly with its parts: high $\Delta E_{\mathrm{tgt}}$ with near-zero
+$\Delta E_{\mathrm{off}}$ is a confined surgical edit; low
+$\Delta E_{\mathrm{tgt}}$ is the did-nothing trap regardless of the ratio; high
+$\Delta E_{\mathrm{off}}$ is the beauty filter. Masked preservation scores exist in
+general-domain editing benchmarks~\cite{qian2025giebench,alebench2024,
+sheynin2024emuedit}; ours differs in being anchored to clinically meaningful facial
+regions and paired with identity as a dual failure-mode detector. Because the
+region masks are defined by the frontal mesh, the metric abstains (returns no
+score) on non-frontal inputs rather than guessing.
+
+\subsection{Ground-truth sanity check}
+
+For faces with a real post-operative photograph we also report the ArcFace cosine
+between the edit and that photograph. This is deliberately a soft sanity check, not
+a ranking target: the post-op sessions differ in pose, expression, makeup, and
+hair, and in pilot experiments geometric proxies such as the gonial angle flipped
+sign under that noise. A preview that lands in the right neighborhood of the real
+outcome should score moderately here; nothing stronger is claimed.
+
+\subsection{Expert rubric (protocol only)}
+
+We release a seven-axis rubric---identity preservation, photorealism, procedure
+specificity, clinical plausibility, edit localization, consistency, and safety of
+the expectation it sets---each scored 1--5, with clinical plausibility reserved for
+a surgeon. The pre-registered pass bar for a procedure is a median clinical
+plausibility of at least 4, identity cosine of at least $0.6$, and no axis median
+below 3. No rubric scores were collected in this study; the automated metrics above
+are the evidence presented, and the surgeon-scored study is the gating next step
+(Sec.~\ref{sec:conclusion}).

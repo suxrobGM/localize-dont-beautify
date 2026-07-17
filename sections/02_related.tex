@@ -1,6 +1,52 @@
 \section{Related Work}
-% Written from docs/novelty_notes.md. Four paragraphs:
-% (a) instruction-guided editing + benchmarks, (b) training-free localized editing,
-% (c) surgical outcome simulation, (d) face analysis + ethics.
-% Every paragraph cites >=4 works and states the differentiation.
-\todo{related work}
+\label{sec:related}
+
+\textbf{Surgical outcome simulation.} Preoperative visualization predates
+generative models by decades: manual computer morphing measurably improves
+rhinoplasty patient satisfaction~\cite{sharp2002computerimaging}, its
+expectation-management risks are equally well documented~\cite{agarwal2007morph},
+and 3D simulation accuracy correlates with postoperative
+satisfaction~\cite{yamamichi2025crisalix,threedvr2026aesthetic}. Learning-based
+successors train bespoke models per procedure: a GAN trained on 3{,}030 paired
+rhinoplasty photographs whose outputs raters could not distinguish from real
+post-ops~\cite{knoedler2024rhinoplastygan}, appearance predictors for
+blepharoptosis~\cite{blepharoptosis2022poap,huang2024ptosisdiffusion}, and
+biomechanics-driven craniofacial simulation~\cite{fang2022acmtnet}; a recent
+systematic review surveys the area~\cite{stephanian2024fpsamreview}. Closest to us,
+Envisage~\cite{agarwal2026envisage} combines a local FLUX-based inpainter with
+MediaPipe masks, hard compositing, and a mask-decomposed score for rhinoplasty. We
+differ on each axis that defines our question: we benchmark hosted black-box APIs
+rather than an open-weight model, across three procedures rather than one, with
+control itself as the manipulated variable. Lim et
+al.~\cite{lim2023generativecosmetic} prompt text-to-image tools about the same
+three procedures but generate generic faces rather than editing a patient's photo.
+
+\textbf{Training-free localized editing.} Methods that confine an edit without
+fine-tuning uniformly reach inside the model: SDEdit, RePaint, and DiffEdit steer
+the sampling loop~\cite{meng2022sdedit,lugmayr2022repaint,couairon2023diffedit},
+Blended (Latent) Diffusion blends masked latents at every denoising
+step~\cite{avrahami2022blended,avrahami2023blendedlatent}, and Prompt-to-Prompt
+and Plug-and-Play inject attention or
+features~\cite{hertz2023prompt2prompt,tumanyan2023plugandplay}. A hosted endpoint
+exposes none of those surfaces. Our masked composite is deliberately the
+post-hoc remnant of this family---the final pixel-space blend, applied after the
+API returns---and the paper measures how far that remnant carries.
+
+\textbf{Benchmarking instruction-guided editors.} General-domain benchmarks are
+plentiful~\cite{brooks2023instructpix2pix,zhang2023magicbrush,wang2023editbench,
+sheynin2024emuedit,ku2024imagenhub,ma2024i2ebench,hui2025hqedit,liu2025step1xedit},
+and hosted commercial editors are now benchmarked
+routinely~\cite{gptimgeval2025,qian2025giebench}. Off-target measurement also has
+precedent: GIE-Bench scores object-masked preservation and finds GPT-Image
+over-edits irrelevant regions~\cite{qian2025giebench}, and ALE-Bench quantifies
+attribute leakage outside the edit target~\cite{alebench2024}. None of these
+address faces in a clinical setting, pair region confinement with identity as dual
+failure modes, or validate against real post-operative photographs---the three
+elements our protocol combines. ArcFace cosine itself is the standard identity
+measure in face editing~\cite{deng2019arcface}; we claim the pairing and the
+per-rung reading, not the metric.
+
+\textbf{Face analysis.} The pipeline builds on MediaPipe's face
+mesh~\cite{lugaresi2019mediapipe,grishchenko2020attentionmesh} with InsightFace's
+SCRFD detection and landmarks as the profile fallback~\cite{guo2022scrfd}, and on
+CIELAB color difference~\cite{sharma2005ciede2000} for the regional metric.

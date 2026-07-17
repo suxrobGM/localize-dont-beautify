@@ -1,2 +1,17 @@
-% Written last (Session 4). Numbers only via macros from tables/numbers.tex.
-\todo{abstract}
+Hosted image-editing models can follow the instruction ``perform a deep plane
+facelift'' --- but they edit the whole face, returning a beauty-filter rendition
+that misrepresents both the patient and the operation. We benchmark four
+off-the-shelf hosted editors (GPT Image~2, Seedream~5.0, Qwen-Image-Edit) on three
+facial procedures using real before/after photograph pairs, under a control
+ladder that requires no model access: prompt-only, a client-side masked composite
+built from facial landmarks, and native masked inpainting. An automated protocol
+scores each edit for the two opposing failure modes --- identity drift and
+off-target change --- via ArcFace cosine and a CIELAB region-localization ratio,
+with real post-operative photographs as a sanity check. Masked compositing pins
+localization at a median of \MedLocComposite{} across models, where prompt-only
+control reaches \MedLocPromptOnly{} and, unexpectedly, the mask-accepting
+endpoint under-edits (localization \MedLocInpaint{} with near-unity identity);
+identity stays above the 0.6 acceptance floor in all \NumScoredEdits{} scored
+edits, and two-procedure chains compose in either order. The results locate the
+capability gap for surgical previews in \emph{control} rather than in the models,
+and show the control can live entirely on the client.
