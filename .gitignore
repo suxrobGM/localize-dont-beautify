@@ -1,0 +1,18 @@
+# LaTeX build artifacts
+*.aux
+*.bbl
+*.blg
+*.log
+*.out
+*.fls
+*.fdb_latexmk
+*.synctex.gz
+*.toc
+
+# Python
+__pycache__/
+.venv/
+*.egg-info/
+
+# Keep main.pdf out of git; build locally or on Overleaf
+main.pdf

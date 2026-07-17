@@ -1,0 +1,52 @@
+\documentclass[conference]{IEEEtran}
+\IEEEoverridecommandlockouts
+
+\usepackage{cite}
+\usepackage{amsmath,amssymb,amsfonts}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{multirow}
+\usepackage{xcolor}
+\usepackage[hidelinks]{hyperref}
+
+\graphicspath{{figures/generated/}{figures/static/}}
+
+% Generated numeric macros (make numbers). Guarded so a fresh checkout still compiles.
+\IfFileExists{tables/numbers.tex}{\input{tables/numbers}}{}
+
+% Editing aid, stripped before submission.
+\newcommand{\todo}[1]{\textcolor{red}{[TODO: #1]}}
+
+\begin{document}
+
+\title{Localize, Don't Beautify: Region-Confined Cosmetic-Surgery Previews\\ with Off-the-Shelf Image Editors}
+
+\author{\IEEEauthorblockN{Sukhrob Ilyosbekov}
+\IEEEauthorblockA{\todo{affiliation}\\
+suxrobgm@gmail.com}}
+
+\maketitle
+
+\begin{abstract}
+\input{sections/00_abstract}
+\end{abstract}
+
+\begin{IEEEkeywords}
+image editing, diffusion models, surgical outcome simulation, identity preservation, benchmark
+\end{IEEEkeywords}
+
+\input{sections/01_intro}
+\input{sections/02_related}
+\input{sections/03_method}
+\input{sections/04_protocol}
+\input{sections/05_setup}
+\input{sections/06_results}
+\input{sections/07_limitations}
+\input{sections/08_ethics}
+\input{sections/09_conclusion}
+
+\nocite{*} % TODO: remove once sections cite explicitly (Session 4)
+\bibliographystyle{IEEEtran}
+\bibliography{refs}
+
+\end{document}

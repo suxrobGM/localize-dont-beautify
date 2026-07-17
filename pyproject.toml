@@ -1,0 +1,14 @@
+[project]
+name = "surgical-preview-paper-scripts"
+version = "0.1.0"
+description = "Analysis scripts that generate the paper's tables and figures from local run data"
+requires-python = ">=3.12"
+dependencies = [
+    "pandas>=2.2",
+    "matplotlib>=3.9",
+    "pillow>=10",
+    "pyyaml>=6",
+]
+
+[tool.uv]
+package = false
