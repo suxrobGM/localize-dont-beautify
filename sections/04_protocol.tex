@@ -1,10 +1,10 @@
 \section{Evaluation Protocol}
 \label{sec:protocol}
 
-A surgical preview fails in two opposite ways. It can change too much of the wrong
-thing---drifting identity or beautifying the whole face---or it can change too
-little of the right thing, returning a near-copy that scores deceptively well on
-similarity metrics. Our protocol measures both directions at once.
+A surgical preview fails in two opposite ways. It can change too much of the
+wrong thing (drifting identity or beautifying the whole face), or it can change
+too little of the right thing, returning a near-copy that scores deceptively well
+on similarity metrics. Our protocol measures both directions at once.
 
 \subsection{Identity}
 
@@ -17,8 +17,8 @@ Bhrany~\cite{agarwal2026envisage} point out, any identity score computed on a
 composited output partially measures pixels that were copied from the input by
 construction. We therefore treat identity on the prompt-only rung as the
 \emph{model-level} measurement and identity on composited rungs as a
-\emph{system-level} property, and we lean on the localization metric---which looks
-inside and outside the mask separately---for the claims compositing actually makes.
+\emph{system-level} property, and we lean on the localization metric, which looks
+inside and outside the mask separately, for the claims compositing actually makes.
 
 \subsection{Regional change and localization}
 
@@ -54,10 +54,10 @@ outcome should score moderately here; nothing stronger is claimed.
 
 \subsection{Expert rubric (protocol only)}
 
-We release a seven-axis rubric---identity preservation, photorealism, procedure
+We release a seven-axis rubric (identity preservation, photorealism, procedure
 specificity, clinical plausibility, edit localization, consistency, and safety of
-the expectation it sets---each scored 1--5, with clinical plausibility reserved for
-a surgeon. The pre-registered pass bar for a procedure is a median clinical
+the expectation it sets), each axis scored 1--5, with clinical plausibility
+reserved for a surgeon. The pre-registered pass bar for a procedure is a median clinical
 plausibility of at least 4, identity cosine of at least $0.6$, and no axis median
 below 3. No rubric scores were collected in this study; the automated metrics above
 are the evidence presented, and the surgeon-scored study is the gating next step

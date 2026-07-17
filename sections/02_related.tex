@@ -29,8 +29,8 @@ step~\cite{avrahami2022blended,avrahami2023blendedlatent}, and Prompt-to-Prompt
 and Plug-and-Play inject attention or
 features~\cite{hertz2023prompt2prompt,tumanyan2023plugandplay}. A hosted endpoint
 exposes none of those surfaces. Our masked composite is deliberately the
-post-hoc remnant of this family---the final pixel-space blend, applied after the
-API returns---and the paper measures how far that remnant carries.
+post-hoc remnant of this family, the final pixel-space blend applied after the
+API returns, and the paper measures how far that remnant carries.
 
 \textbf{Benchmarking instruction-guided editors.} General-domain benchmarks are
 plentiful~\cite{brooks2023instructpix2pix,zhang2023magicbrush,wang2023editbench,
@@ -41,8 +41,8 @@ precedent: GIE-Bench scores object-masked preservation and finds GPT-Image
 over-edits irrelevant regions~\cite{qian2025giebench}, and ALE-Bench quantifies
 attribute leakage outside the edit target~\cite{alebench2024}. None of these
 address faces in a clinical setting, pair region confinement with identity as dual
-failure modes, or validate against real post-operative photographs---the three
-elements our protocol combines. ArcFace cosine itself is the standard identity
+failure modes, or validate against real post-operative photographs; our protocol
+combines all three. ArcFace cosine itself is the standard identity
 measure in face editing~\cite{deng2019arcface}; we claim the pairing and the
 per-rung reading, not the metric.
 

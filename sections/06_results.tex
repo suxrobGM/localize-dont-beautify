@@ -34,8 +34,8 @@ editors. The same models under prompt-only control reach only
 \MedLocPromptOnly{} (\LocPromptOnlyMin--\LocPromptOnlyMax): roughly half of the
 measured change lands outside the surgical region, which is the beauty-filter
 signature the metric was built to expose. The off-target numbers make the contrast
-concrete---a median $\Delta E_{\mathrm{off}}$ of \MedOffPromptOnly{} for
-prompt-only edits against \MedOffComposite{} for composited ones---while the
+concrete: a median $\Delta E_{\mathrm{off}}$ of \MedOffPromptOnly{} for
+prompt-only edits against \MedOffComposite{} for composited ones, while the
 on-target change stays substantial (median $\Delta E_{\mathrm{tgt}}$
 \MedTgtComposite{} composited vs.\ \MedTgtPromptOnly{} prompt-only). Prompt
 guardrails alone, however carefully worded, did not confine any model's edit;
@@ -49,8 +49,8 @@ $0.6$, and \NumBelowFloorFlux{} of them come from FLUX.2~[pro], which sits at on
 end of an aggressiveness spectrum: it produces the largest anatomical changes in
 the study (median prompt-only $\Delta E_{\mathrm{tgt}}$ \MedTgtFluxPromptOnly)
 and pays for them in identity (prompt-only median
-\MedIdentityFluxPromptOnly{}, single edits as low as \IdentityMinAll{}---at that
-score the output is effectively a different person). The Nano Banana models
+\MedIdentityFluxPromptOnly{}, single edits as low as \IdentityMinAll{}, a score
+at which the output is effectively a different person). The Nano Banana models
 occupy the opposite end, holding identity at \MedIdentityNanoBanana{} while
 making the gentlest edits (median $\Delta E_{\mathrm{tgt}}$ \MedTgtNanoBanana).
 GPT Image~2 and Seedream~5.0 fall between. Following
@@ -77,7 +77,7 @@ tracks each model's editing aggressiveness rather than output quality.
 The masked-inpaint rung was expected to dominate: the endpoint receives the mask
 explicitly and should confine the edit for free. Instead it fails differently on
 each procedure. On rhinoplasty it shows the did-nothing trap: identity of
-\InpaintRhinoIdentity{} with a target change of only \InpaintRhinoTgt{}---barely
+\InpaintRhinoIdentity{} with a target change of only \InpaintRhinoTgt{}, barely
 above its off-target change of \InpaintRhinoOff{}, for a localization of
 \InpaintRhinoLoc{}. The nose edit is timid while the returned image differs
 slightly everywhere, consistent with a full-image re-encode by the endpoint. On
@@ -120,8 +120,8 @@ feasibility.
 \subsection{Qualitative results and failure modes}
 
 Fig.~\ref{fig:teaser} and Fig.~\ref{fig:grid} show representative edits. The
-facelift examples display the intended tissue repositioning---jawline definition,
-reduced jowls, a cleaner cervicomental angle---while skin texture, lighting, and
+facelift examples display the intended tissue repositioning (jawline definition,
+reduced jowls, a cleaner cervicomental angle) while skin texture, lighting, and
 background survive untouched in the composited column. Three failure modes
 recurred. The ghost seam: before pose gating, profile views put the frontal-mesh
 mask on the cheek and composited a translucent copy of the nose into it; gating
@@ -130,7 +130,7 @@ The person swap: FLUX.2's strongest edits replace enough of the face to break
 identity, and compositing can only partially repair this because the damage is
 inside the mask. The detector abstention: on one extreme-profile input the identity model finds
 no face at all, so that face's twelve cells contribute ground-truth cosines but
-no identity scores---counted, not hidden, in Table~\ref{tab:main}.
+no identity scores; they are counted, not hidden, in Table~\ref{tab:main}.
 
 \begin{figure*}[t]
   \centering

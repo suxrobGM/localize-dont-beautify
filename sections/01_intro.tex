@@ -23,8 +23,8 @@ have become strikingly good at instruction-following photo edits. It is natural 
 ask whether a clinic-quality preview is now one API call away.
 
 It is not, and the reason is instructive. Asked for a specific anatomical
-change---a deep-plane facelift's jawline and neck repositioning, a dorsal hump
-reduction---hosted editors return something subtly different: a flattering
+change, such as a facelift's jawline and neck repositioning or a dorsal hump
+reduction, hosted editors return something subtly different: a flattering
 overall rendition of the face, with smoothed skin and brightened features. The
 edit lands everywhere. For a surgical preview this is a double failure. It
 misrepresents the person (identity drift), and it misrepresents the operation,
@@ -35,9 +35,9 @@ the model's latents, attention, or sampling loop, and a hosted API exposes none 
 them.
 
 We ask how far client-side control can carry instead, and how to measure whether
-it worked. Concretely, we benchmark six hosted editors---GPT Image~2 at two
+it worked. Concretely, we benchmark six hosted editors (GPT Image~2 at two
 quality tiers, Nano Banana~Pro and~2, Seedream~5.0, and FLUX.2~[pro], plus a Qwen
-inpainting endpoint for the mask rung---on deep plane facelift and rhinoplasty,
+inpainting endpoint for the mask rung) on deep plane facelift and rhinoplasty,
 using real, licensed before/after photograph pairs, under a fixed seed and a full
 experimental matrix. Our contributions:
 
@@ -67,5 +67,5 @@ image-editing APIs for identity-preserving surgical previews across multiple
 procedures. The claim is deliberately scoped: bespoke surgical simulators
 exist~\cite{knoedler2024rhinoplastygan,agarwal2026envisage}, and hosted editors
 have been benchmarked in other domains~\cite{qian2025giebench,gptimgeval2025};
-the combination---black-box APIs, client-side region confinement, clinical ground
-truth---is the gap this paper fills (Sec.~\ref{sec:related}).
+the combination of black-box APIs, client-side region confinement, and clinical
+ground truth is the gap this paper fills (Sec.~\ref{sec:related}).

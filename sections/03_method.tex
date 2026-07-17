@@ -40,7 +40,7 @@ the model can be touched.
 Region masks derive from MediaPipe's 478-point face
 mesh~\cite{lugaresi2019mediapipe,grishchenko2020attentionmesh}. Each region is the
 convex hull of a landmark subset: the face splits at the lower-eyelid line into an
-upper-face zone (forehead, brows, eyes---which a facelift must not change) and a
+upper-face zone (forehead, brows, and eyes, which a facelift must not change) and a
 jaw--neck zone (cheeks, nasolabial folds, jowls, jawline, chin). The mesh has no
 neck landmarks, so the jaw--neck hull extends below the chin by a fixed fraction of
 face height. The nose region is a perimeter hull dilated by a margin proportional
@@ -77,8 +77,8 @@ unmodified edit for those inputs rather than a corrupted one.
 \label{sec:guardrails}
 
 The dominant failure mode we observed is not refusal but \emph{generic
-beautification}: smoothed skin, brightened teeth, subtly enlarged eyes---a beauty
-filter where a surgical result was requested. Every request therefore carries three
+beautification}: smoothed skin, brightened teeth, and subtly enlarged eyes, a
+beauty filter where a surgical result was requested. Every request therefore carries three
 fixed prompt fragments in addition to the procedure text. A negative fragment lists
 the beautification behaviors to avoid (``beauty filter, skin smoothing,
 airbrushing, wrinkle removal, \ldots{} different person, identity change, face
