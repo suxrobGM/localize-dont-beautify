@@ -3,19 +3,19 @@
 \toprule
 Procedure & Model & Control & $n$ & Identity$\uparrow$ & Loc.$\uparrow$ & $\Delta E_{\mathrm{tgt}}$ & Lat.\,(s) & Cost\,(\$) \\
 \midrule
-Deep plane facelift & FLUX.2 [pro] & Masked composite & 8 & 0.711 {\scriptsize(0.476--0.894)} & 0.986 & 7.6 & 16 & 0.045 \\
-Deep plane facelift & FLUX.2 [pro] & Prompt only & 8 & 0.594 {\scriptsize(0.195--0.852)} & 0.496 & 8.8 & 16 & 0.045 \\
-Deep plane facelift & GPT Image 2 & Masked composite & 8 & 0.934 {\scriptsize(0.902--0.963)} & 0.982 & 3.7 & 53 & 0.060 \\
-Deep plane facelift & GPT Image 2 & Prompt only & 8 & 0.907 {\scriptsize(0.894--0.943)} & 0.557 & 4.1 & 52 & 0.060 \\
-Deep plane facelift & GPT Image 2 (low) & Masked composite & 8 & 0.872 {\scriptsize(0.828--0.939)} & 0.984 & 4.9 & 22 & 0.015 \\
-Deep plane facelift & GPT Image 2 (low) & Prompt only & 8 & 0.867 {\scriptsize(0.796--0.907)} & 0.541 & 6.0 & 23 & 0.015 \\
-Deep plane facelift & Nano Banana 2 & Masked composite & 8 & 0.941 {\scriptsize(0.865--0.966)} & 0.978 & 3.5 & 13 & 0.080 \\
-Deep plane facelift & Nano Banana 2 & Prompt only & 8 & 0.927 {\scriptsize(0.873--0.952)} & 0.536 & 3.7 & 13 & 0.080 \\
-Deep plane facelift & Nano Banana Pro & Masked composite & 8 & 0.947 {\scriptsize(0.889--0.977)} & 0.975 & 3.2 & 21 & 0.150 \\
-Deep plane facelift & Nano Banana Pro & Prompt only & 8 & 0.927 {\scriptsize(0.874--0.985)} & 0.545 & 3.3 & 23 & 0.150 \\
-Deep plane facelift & Qwen-Image-Edit (inpaint) & Masked inpaint & 7 & 0.672 {\scriptsize(0.591--0.819)} & 0.746 & 5.5 & 14 & 0.030 \\
-Deep plane facelift & Seedream 5.0 & Masked composite & 8 & 0.970 {\scriptsize(0.956--0.978)} & 0.976 & 3.1 & 55 & 0.035 \\
-Deep plane facelift & Seedream 5.0 & Prompt only & 8 & 0.955 {\scriptsize(0.940--0.975)} & 0.471 & 3.3 & 60 & 0.035 \\
+Facelift-style jaw--neck & FLUX.2 [pro] & Masked composite & 8 & 0.711 {\scriptsize(0.476--0.894)} & 0.986 & 7.6 & 16 & 0.045 \\
+Facelift-style jaw--neck & FLUX.2 [pro] & Prompt only & 8 & 0.594 {\scriptsize(0.195--0.852)} & 0.496 & 8.8 & 16 & 0.045 \\
+Facelift-style jaw--neck & GPT Image 2 & Masked composite & 8 & 0.934 {\scriptsize(0.902--0.963)} & 0.982 & 3.7 & 53 & 0.060 \\
+Facelift-style jaw--neck & GPT Image 2 & Prompt only & 8 & 0.907 {\scriptsize(0.894--0.943)} & 0.557 & 4.1 & 52 & 0.060 \\
+Facelift-style jaw--neck & GPT Image 2 (low) & Masked composite & 8 & 0.872 {\scriptsize(0.828--0.939)} & 0.984 & 4.9 & 22 & 0.015 \\
+Facelift-style jaw--neck & GPT Image 2 (low) & Prompt only & 8 & 0.867 {\scriptsize(0.796--0.907)} & 0.541 & 6.0 & 23 & 0.015 \\
+Facelift-style jaw--neck & Nano Banana 2 & Masked composite & 8 & 0.941 {\scriptsize(0.865--0.966)} & 0.978 & 3.5 & 13 & 0.080 \\
+Facelift-style jaw--neck & Nano Banana 2 & Prompt only & 8 & 0.927 {\scriptsize(0.873--0.952)} & 0.536 & 3.7 & 13 & 0.080 \\
+Facelift-style jaw--neck & Nano Banana Pro & Masked composite & 8 & 0.947 {\scriptsize(0.889--0.977)} & 0.975 & 3.2 & 21 & 0.150 \\
+Facelift-style jaw--neck & Nano Banana Pro & Prompt only & 8 & 0.927 {\scriptsize(0.874--0.985)} & 0.545 & 3.3 & 23 & 0.150 \\
+Facelift-style jaw--neck & Qwen-Image-Edit (inpaint) & Masked inpaint & 7 & 0.672 {\scriptsize(0.591--0.819)} & 0.746 & 5.5 & 14 & 0.030 \\
+Facelift-style jaw--neck & Seedream 5.0 Lite & Masked composite & 8 & 0.970 {\scriptsize(0.956--0.978)} & 0.976 & 3.1 & 55 & 0.035 \\
+Facelift-style jaw--neck & Seedream 5.0 Lite & Prompt only & 8 & 0.955 {\scriptsize(0.940--0.975)} & 0.471 & 3.3 & 60 & 0.035 \\
 Chained: facelift $\to$ rhino. & GPT Image 2 & Masked composite & 1 & 0.841 {\scriptsize(0.841--0.841)} & 0.984 & 9.5 & -- & -- \\
 Rhinoplasty & FLUX.2 [pro] & Masked composite & 7 & 0.703 {\scriptsize(0.428--0.922)} & 0.996 & 12.1 & 18 & 0.045 \\
 Rhinoplasty & FLUX.2 [pro] & Prompt only & 7 & 0.630 {\scriptsize(0.520--0.823)} & 0.527 & 13.8 & 17 & 0.045 \\
@@ -28,8 +28,8 @@ Rhinoplasty & Nano Banana 2 & Prompt only & 7 & 0.890 {\scriptsize(0.609--0.962)
 Rhinoplasty & Nano Banana Pro & Masked composite & 7 & 0.905 {\scriptsize(0.663--0.959)} & 0.996 & 5.0 & 22 & 0.150 \\
 Rhinoplasty & Nano Banana Pro & Prompt only & 7 & 0.903 {\scriptsize(0.663--0.959)} & 0.622 & 5.1 & 22 & 0.150 \\
 Rhinoplasty & Qwen-Image-Edit (inpaint) & Masked inpaint & 7 & 0.965 {\scriptsize(0.927--0.990)} & 0.530 & 1.9 & 10 & 0.030 \\
-Rhinoplasty & Seedream 5.0 & Masked composite & 7 & 0.985 {\scriptsize(0.879--0.992)} & 0.995 & 2.6 & 44 & 0.035 \\
-Rhinoplasty & Seedream 5.0 & Prompt only & 7 & 0.964 {\scriptsize(0.890--0.984)} & 0.450 & 2.6 & 47 & 0.035 \\
+Rhinoplasty & Seedream 5.0 Lite & Masked composite & 7 & 0.985 {\scriptsize(0.879--0.992)} & 0.995 & 2.6 & 44 & 0.035 \\
+Rhinoplasty & Seedream 5.0 Lite & Prompt only & 7 & 0.964 {\scriptsize(0.890--0.984)} & 0.450 & 2.6 & 47 & 0.035 \\
 Chained: rhino.\ $\to$ facelift & GPT Image 2 & Masked composite & 1 & 0.848 {\scriptsize(0.848--0.848)} & 0.981 & 10.1 & -- & -- \\
 \bottomrule
 \end{tabular}

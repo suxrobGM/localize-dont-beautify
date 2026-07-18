@@ -36,14 +36,14 @@ MODEL_NAMES = {
     "gpt_image_2_low": "GPT Image 2 (low)",
     "nano_banana_pro": "Nano Banana Pro",
     "nano_banana_2": "Nano Banana 2",
-    "seedream_5_0": "Seedream 5.0",
+    "seedream_5_0": "Seedream 5.0 Lite",
     "flux_2_pro": "FLUX.2 [pro]",
     "qwen_image_edit_inpaint": "Qwen-Image-Edit (inpaint)",
 }
 
 PROCEDURE_NAMES = {
-    "deep_plane_facelift": "Deep plane facelift",
-    "facelift": "Deep plane facelift",
+    "deep_plane_facelift": "Facelift-style jaw--neck",
+    "facelift": "Facelift-style jaw--neck",
     "rhinoplasty": "Rhinoplasty",
     "rhinoplasty_then_deep_plane_facelift": "Chained: rhino.\\ $\\to$ facelift",
     "deep_plane_facelift_then_rhinoplasty": "Chained: facelift $\\to$ rhino.",

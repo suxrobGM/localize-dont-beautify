@@ -1,10 +1,9 @@
-"""Stems selected for the qualitative figures, behind the real-face license gate.
+"""Stems selected for qualitative figures in the internal working draft.
 
-Every face in the scored runs is a real person from a licensed before/after dataset
-("consented for AI use" per the experiment manifest). Publication in a paper is a
-separate right: a stem may only flip to verified=True after its source passes
-docs/real_face_checklist.md. The dataset licensee confirmed on 2026-07-16 that the
-license permits academic republication; exact attribution wording is still owed.
+Every face is a real person from a publicly accessible before/after source. The
+legacy ``verified`` flag permits working-draft figure generation only; it does not
+assert consent, copyright permission, IRB review, or submission readiness. See
+docs/real_face_checklist.md before public or archival use.
 """
 
 from dataclasses import dataclass
@@ -14,10 +13,10 @@ from dataclasses import dataclass
 class Stem:
     face_id: str        # e.g. "real_01"
     procedure: str      # canonical procedure slug
-    verified: bool      # license checklist passed for this face's source
+    verified: bool      # allowed in the internal working draft only
 
 
-# Teaser (Fig. 1): same face under prompt_only and masked_composite, gpt_image_2.
+# Teaser (Fig. 1): working-draft use only until the checklist is complete.
 TEASER_FACE = Stem("real_01", "deep_plane_facelift", verified=True)
 
 # Qualitative grid: one row per procedure/control contrast. Faces must be in the

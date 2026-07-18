@@ -9,6 +9,10 @@ import os
 
 os.environ.setdefault("SOURCE_DATE_EPOCH", "0")  # reproducible PDF metadata
 
+import matplotlib
+
+matplotlib.use("Agg")
+
 import matplotlib.pyplot as plt
 import pandas as pd
 from matplotlib.axes import Axes
@@ -72,7 +76,7 @@ def fig_scatter(df: pd.DataFrame) -> None:
             linewidths=0.5, zorder=3, alpha=0.9,
         )
     ax.axhline(0.6, color=MUTED, lw=0.8, ls=(0, (4, 3)), zorder=1)
-    ax.text(0.02, 0.605, "identity floor (0.6)", color=MUTED, fontsize=7, va="bottom")
+    ax.text(0.02, 0.605, "identity reference (0.6)", color=MUTED, fontsize=7, va="bottom")
     ax.annotate("off-target edits\n(beauty-filter risk)", xy=(0.5, 0.9), xytext=(0.13, 0.8),
                 ha="center", fontsize=7, color=INK,
                 arrowprops={"arrowstyle": "-", "color": MUTED, "lw": 0.6})
@@ -93,7 +97,7 @@ def fig_scatter(df: pd.DataFrame) -> None:
     short = {
         "gpt_image_2": "GPT-2", "gpt_image_2_low": "GPT-2 low",
         "nano_banana_pro": "NB Pro", "nano_banana_2": "NB 2",
-        "seedream_5_0": "Seedream", "flux_2_pro": "FLUX.2",
+        "seedream_5_0": "Seedream Lite", "flux_2_pro": "FLUX.2",
         "qwen_image_edit_inpaint": "Qwen inp.",
     }
     model_handles = [
@@ -174,7 +178,11 @@ def fig_gt_strip(df: pd.DataFrame) -> None:
         ax.plot([g.gt_identity_cosine.median()] * 2, [i - 0.28, i + 0.28],
                 color=INK, lw=1.4, zorder=4)
     ax.set_yticks(range(len(procs)))
-    ax.set_yticklabels([p.replace("_", " ").capitalize() for p in procs])
+    proc_labels = {
+        "deep_plane_facelift": "Facelift-style",
+        "rhinoplasty": "Rhinoplasty",
+    }
+    ax.set_yticklabels([proc_labels.get(p, p.replace("_", " ").capitalize()) for p in procs])
     ax.set_xlabel("ArcFace cosine, edited vs. post-op photo")
     ax.set_ylim(-0.6, len(procs) - 0.4)
     style_axes(ax)

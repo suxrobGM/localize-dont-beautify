@@ -1,18 +1,31 @@
 \section{Limitations}
 \label{sec:limitations}
 
-The study is small: \NumScoredEdits{} scored edits over \NumFacesScored{} faces,
-with some model--procedure cells holding under ten samples and the chained
-experiment probing a single face. We therefore report medians and ranges only and
-draw no significance conclusions. The regional-change metric abstains on
-non-frontal inputs, so the profile rhinoplasty faces contribute identity and
-ground-truth scores but no localization evidence, and one extreme profile defeats
-face detection entirely. These are precisely the poses where rhinoplasty previews
-matter most clinically. The demographic
-composition of the test set was not recorded, so nothing here speaks to performance
-across skin tones, ages, or sexes; commercial face pipelines have documented gaps
-of exactly that kind~\cite{buolamwini2018gendershades}. The expert rubric shipped
-with the protocol has no collected scores yet, so clinical plausibility rests on
-the automated metrics and the reader's own eyes. Finally, the models under test
-are hosted services that change without notice; the pinned endpoints and run dates
-make the study auditable but not permanently reproducible.
+This is a small pilot: \NumPrimaryFaces{} faces support the main comparisons,
+each model--control cell has fewer than ten faces, and the chained probe uses one
+additional face. Multiple outputs from one face are correlated; the clustered
+interval addresses that dependence descriptively but cannot provide broad
+population inference. Each cell contains one generated output, and two endpoints
+ignore the supplied seed, so stochastic variation is unknown.
+
+The localization ratio measures CIELAB pixel change, not anatomical direction,
+clinical plausibility, realism, or expected postoperative appearance. Its keep
+zone covers only part of the face and it abstains on profile views, precisely where
+rhinoplasty visualization is important. Compositing guarantees off-mask
+preservation, making that result a verification of system behavior rather than a
+test of model quality. ArcFace's 0.6 line is heuristic, and the postoperative
+cosines lack an input baseline; neither is a validated surgical-outcome metric.
+
+No surgeon ratings were collected. Clinical plausibility therefore rests neither
+on expert judgment nor on a clinically validated automated score. The demographic
+composition of the face set was not recorded, so the results cannot be generalized
+across skin tones, ages, or sexes; commercial face pipelines have documented
+demographic disparities~\cite{buolamwini2018gendershades}. Public visibility of
+the source photographs does not itself establish republication, hosted-processing,
+or research-use permission, which must be resolved before submission.
+
+Finally, hosted endpoints and aliases can change without notice. Run dates and
+endpoint identifiers aid auditing but do not pin every underlying model revision.
+The public repository contains the canonical score table and paper analysis, not
+the complete generation/scoring implementation or source photographs, so the
+study is not presently reproducible end to end.

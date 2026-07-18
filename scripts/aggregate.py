@@ -9,6 +9,7 @@ and emits:
   tables/numbers.tex        \\newcommand macros for every number quoted in prose
 """
 
+import random
 import sys
 
 import pandas as pd
@@ -128,7 +129,41 @@ def write_setup_models() -> None:
     (TABLES_DIR / "setup_models.tex").write_text(tex, encoding="utf-8")
 
 
-def write_numbers(df: pd.DataFrame, n_runs_total: int, n_runs_scored: int) -> None:
+def clustered_median_ci(
+    df: pd.DataFrame,
+    value_col: str,
+    cluster_col: str,
+    *,
+    n_boot: int = 10_000,
+    seed: int = 20_260_717,
+) -> tuple[float, float]:
+    """Patient-clustered percentile interval for a descriptive median.
+
+    Faces, rather than model outputs, are resampled so the interval does not
+    treat multiple editors applied to one photograph as independent patients.
+    """
+    groups = {
+        str(key): group[value_col].dropna().tolist()
+        for key, group in df.groupby(cluster_col)
+    }
+    clusters = list(groups)
+    rng = random.Random(seed)
+    estimates: list[float] = []
+    for _ in range(n_boot):
+        values: list[float] = []
+        for _ in clusters:
+            values.extend(groups[rng.choice(clusters)])
+        estimates.append(float(pd.Series(values).median()))
+    series = pd.Series(estimates)
+    return float(series.quantile(0.025)), float(series.quantile(0.975))
+
+
+def write_numbers(
+    df: pd.DataFrame,
+    n_runs_total: int,
+    n_runs_scored: int,
+    n_attempted: int,
+) -> None:
     chained = df[df.procedure.str.contains("_then_")]
     single = df[~df.procedure.str.contains("_then_")]
     comp = single[single.control == "masked_composite"]
@@ -141,18 +176,52 @@ def write_numbers(df: pd.DataFrame, n_runs_total: int, n_runs_scored: int) -> No
     nb = df[df.model.isin(["nano_banana_pro", "nano_banana_2"])]
     gt = df.gt_identity_cosine.dropna()
 
+    paired = prom.merge(
+        comp,
+        on=["procedure", "face_id", "model"],
+        suffixes=("_prompt", "_composite"),
+        validate="one_to_one",
+    ).dropna(
+        subset=[
+            "change_localization_prompt",
+            "change_localization_composite",
+            "change_offtarget_prompt",
+            "change_offtarget_composite",
+        ]
+    )
+    paired["face_cluster"] = paired.procedure + "/" + paired.face_id
+    paired["localization_gain"] = (
+        paired.change_localization_composite - paired.change_localization_prompt
+    )
+    paired["offtarget_reduction"] = (
+        paired.change_offtarget_prompt - paired.change_offtarget_composite
+    )
+    loc_ci = clustered_median_ci(paired, "localization_gain", "face_cluster")
+    off_ci = clustered_median_ci(paired, "offtarget_reduction", "face_cluster")
+
     # face_id is only unique within a procedure (both real datasets number their
     # faces real_NN), so distinct faces are (procedure, face) pairs, with the two
     # chained orders folded into one procedure so their shared face counts once.
     proc_family = df.procedure.where(~df.procedure.str.contains("_then_"), "chained")
     n_faces = (proc_family + "/" + df.face_id).nunique()
+    n_primary_faces = (single.procedure + "/" + single.face_id).nunique()
 
     macros: list[tuple[str, object]] = [
         ("NumScoredEdits", len(df)),
+        ("NumAttemptedEdits", n_attempted),
+        ("NumExcludedEdits", n_attempted - len(df)),
         ("NumRunsTotal", n_runs_total),
         ("NumRunsScored", n_runs_scored),
         ("NumModelsScored", df.model.nunique()),
         ("NumFacesScored", n_faces),
+        ("NumPrimaryFaces", n_primary_faces),
+        ("NumLocalizationFaces", paired.face_cluster.nunique()),
+        ("MedPairedLocGain", fmt(paired.localization_gain.median())),
+        ("PairedLocGainLow", fmt(loc_ci[0])),
+        ("PairedLocGainHigh", fmt(loc_ci[1])),
+        ("MedPairedOffReduction", fmt(paired.offtarget_reduction.median(), 2)),
+        ("PairedOffReductionLow", fmt(off_ci[0], 2)),
+        ("PairedOffReductionHigh", fmt(off_ci[1], 2)),
         ("MedLocComposite", fmt(comp.change_localization.median())),
         ("LocCompositeMin", fmt(comp.change_localization.min())),
         ("LocCompositeMax", fmt(comp.change_localization.max())),
@@ -208,10 +277,10 @@ def write_numbers(df: pd.DataFrame, n_runs_total: int, n_runs_scored: int) -> No
 def main() -> None:
     raw = load_runs()
     n_runs_total = raw.run_id.nunique()
-    df = normalize(raw)
-    df = df[(df.ok == True) & df.identity_cosine.notna()]  # noqa: E712
+    all_cells = dedupe(normalize(raw))
+    n_attempted = len(all_cells)
+    df = all_cells[(all_cells.ok == True) & all_cells.identity_cosine.notna()]  # noqa: E712
     n_runs_scored = df.run_id.nunique()
-    df = dedupe(df)
 
     keep = [
         "run_id", "stem", "face_id", "model", "procedure", "control",
@@ -222,9 +291,12 @@ def main() -> None:
 
     write_main_results(df)
     write_setup_models()
-    write_numbers(df, n_runs_total, n_runs_scored)
+    write_numbers(df, n_runs_total, n_runs_scored, n_attempted)
 
-    print(f"runs total={n_runs_total} scored={n_runs_scored} canonical rows={len(df)}")
+    print(
+        f"runs total={n_runs_total} scored={n_runs_scored} "
+        f"attempted cells={n_attempted} canonical rows={len(df)}"
+    )
     print(df.groupby(["procedure", "model", "control"]).size().to_string())
 
 

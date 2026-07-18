@@ -15,10 +15,13 @@ biomechanics-driven craniofacial simulation~\cite{fang2022acmtnet}; a recent
 systematic review surveys the area~\cite{stephanian2024fpsamreview}. Closest to us,
 Envisage~\cite{agarwal2026envisage} combines a local FLUX-based inpainter with
 MediaPipe masks, hard compositing, and a mask-decomposed score built on masked
-LPIPS~\cite{zhang2018lpips} for rhinoplasty. We
-differ on each axis that defines our question: we benchmark six hosted black-box
-APIs rather than one open-weight model, on two procedures rather than one, with
-control itself as the manipulated variable. Lim et
+LPIPS~\cite{zhang2018lpips}. It evaluates rhinoplasty on 211 cases and shows why
+full-face ArcFace scores are confounded after compositing. We address a narrower
+systems question: six hosted black-box editing configurations rather than one
+open-weight pipeline, two requested edit types, and control itself as the
+manipulated variable. We do not reproduce Envisage's clinical presets,
+mask-decomposed fidelity score, sample size, or ground-truth-relative analysis;
+those differences limit direct quality comparisons. Lim et
 al.~\cite{lim2023generativecosmetic} prompt text-to-image tools about the same
 procedures but generate generic faces rather than editing a patient's photo.
 
@@ -39,14 +42,15 @@ plentiful~\cite{brooks2023instructpix2pix,zhang2023magicbrush,wang2023editbench,
 sheynin2024emuedit,ku2024imagenhub,ma2024i2ebench,hui2025hqedit,liu2025step1xedit},
 and hosted commercial editors are now benchmarked
 routinely~\cite{gptimgeval2025,qian2025giebench}. Off-target measurement also has
-precedent: GIE-Bench scores object-masked preservation and finds GPT-Image
+precedent: GIE-Bench scores object-masked preservation and finds that GPT-Image
 over-edits irrelevant regions~\cite{qian2025giebench}, and ALE-Bench quantifies
-attribute leakage outside the edit target~\cite{alebench2024}. None of these
-address faces in a clinical setting, pair region confinement with identity as dual
-failure modes, or validate against real post-operative photographs; our protocol
-combines all three. ArcFace cosine itself is the standard identity
-measure in face editing~\cite{deng2019arcface}; we claim the pairing and the
-per-rung reading, not the metric.
+attribute leakage outside the edit target~\cite{alebench2024}. These benchmarks
+do not address cosmetic-surgery preview editing. Our pilot pairs an identity
+diagnostic with facial target/keep-zone pixel change, but unlike clinically
+validated outcome studies it has no surgeon ratings or input-relative
+postoperative accuracy measure. ArcFace cosine itself is standard in face
+editing~\cite{deng2019arcface}; neither it nor the CIELAB ratio is claimed as a
+new or clinically validated metric.
 
 \textbf{Face analysis.} The pipeline builds on MediaPipe's face
 mesh~\cite{lugaresi2019mediapipe,grishchenko2020attentionmesh} with InsightFace's

@@ -10,16 +10,17 @@ the client, before the request or after the response.
 \subsection{The control ladder}
 \label{sec:ladder}
 
-A procedure specification consists of a target region $r$ (the facelift edits the
-jaw and neck, rhinoplasty the nose), a positive
-instruction describing the anatomical change, and a negative prompt. We compare
-three rungs of increasing client-side control, holding faces, models, prompts, and
-seeds fixed:
+A procedure specification consists of a target region $r$ (jaw and neck for the
+facelift-style request, nose for rhinoplasty), a positive instruction describing
+the visible anatomical change, and a list of changes to avoid. We compare three
+rungs of increasing client-side control, holding faces, model settings, and
+prompts fixed. A common seed is supplied to every endpoint; the GPT Image~2 and
+Seedream~5.0 Lite schemas have no seed field and ignore it:
 
 \begin{itemize}
   \item \textbf{Prompt only.} The photo and instruction go to the endpoint
   unmodified and the response is used as-is. This measures what the model does when
-  asked, politely but firmly, to edit one region.
+  instructed to edit one region.
   \item \textbf{Masked composite.} The endpoint still edits the whole image, but we
   discard everything outside $r$: the response is aligned back onto the input and
   composited through a feathered region mask (Sec.~\ref{sec:composite}), so pixels
@@ -77,14 +78,16 @@ unmodified edit for those inputs rather than a corrupted one.
 \label{sec:guardrails}
 
 The dominant failure mode we observed is not refusal but \emph{generic
-beautification}: smoothed skin, brightened teeth, and subtly enlarged eyes, a
-beauty filter where a surgical result was requested. Every request therefore carries three
-fixed prompt fragments in addition to the procedure text. A negative fragment lists
-the beautification behaviors to avoid (``beauty filter, skin smoothing,
+beautification}: smoothed skin, brightened teeth, and subtly enlarged eyes. Every
+request therefore carries three fixed instruction fragments in addition to the
+procedure text. An avoidance fragment lists the beautification behaviors
+(``beauty filter, skin smoothing,
 airbrushing, wrinkle removal, \ldots{} different person, identity change, face
 swap''), a positive fragment anchors realism and framing (``photorealistic, same
 person, identity preserved, natural skin texture, identical camera framing''), and
 an intensity fragment scopes the change to anatomy (``change only facial tissue and
 contour; keep skin tone, color, exposure, and lighting identical to the input'').
-The prompts ask for a decisive anatomical correction precisely because the
-evaluation punishes both timid edits and global ones (Sec.~\ref{sec:protocol}).
+Where a separate negative-prompt field exists, the avoidance fragment is supplied
+there; otherwise it is appended to the main instruction. The prompts request a
+visible anatomical correction because target and off-target changes are reported
+together (Sec.~\ref{sec:protocol}).

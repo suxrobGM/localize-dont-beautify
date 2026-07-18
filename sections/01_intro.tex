@@ -4,42 +4,42 @@
 \begin{figure*}[t]
   \centering
   \includegraphics[width=0.88\textwidth]{teaser_triptych.png}
-  \caption{A deep-plane-facelift preview from a single photograph (GPT Image~2).
-  The prompt-only edit (center) changes the whole image; the masked composite
-  (right) confines the same model's edit to the jaw--neck region, leaving every
-  other pixel identical to the input.}
+  \caption{A facelift-style jaw--neck edit from one photograph (GPT Image~2).
+  The prompt-only output (center) changes regions throughout the image; the
+  masked composite (right) retains the model output only inside the blend mask.}
   \label{fig:teaser}
 \end{figure*}
 
-Surgeons have shown patients simulated outcomes for decades because it works:
-computer imaging improves rhinoplasty patient
+Surgeons have used simulated outcomes in patient consultations for decades.
+Computer imaging has been associated with improved rhinoplasty patient
 satisfaction~\cite{sharp2002computerimaging}, and how closely a 3D simulation
 matches the eventual outcome predicts how satisfied the patient will
 be~\cite{yamamichi2025crisalix}. The same literature warns that an over-idealized
 preview sets expectations no operation can meet~\cite{agarwal2007morph}. Producing
 these previews today requires either manual morphing skill or dedicated 3D
 systems; meanwhile, general-purpose image-editing models served over public APIs
-have become strikingly good at instruction-following photo edits. It is natural to
-ask whether a clinic-quality preview is now one API call away.
+can perform instruction-guided photo edits. This motivates testing whether those
+services can support controlled cosmetic-surgery visualization without access to
+their weights or inference process.
 
-It is not, and the reason is instructive. Asked for a specific anatomical
-change, such as a facelift's jawline and neck repositioning or a dorsal hump
-reduction, hosted editors return something subtly different: a flattering
-overall rendition of the face, with smoothed skin and brightened features. The
-edit lands everywhere. For a surgical preview this is a double failure. It
-misrepresents the person (identity drift), and it misrepresents the operation,
-showing changes no scalpel would make (a beauty filter). The training-free
+In preliminary tests, a request for a specific visible change, such as jawline
+and neck repositioning or dorsal-hump reduction, also altered skin, lighting, and
+other facial regions. Such off-target change can both weaken identity retention
+and present cosmetic effects unrelated to the requested procedure. The
+training-free
 localization literature knows how to confine
 edits~\cite{avrahami2022blended,couairon2023diffedit}, but every such method needs
 the model's latents, attention, or sampling loop, and a hosted API exposes none of
 them.
 
-We ask how far client-side control can carry instead, and how to measure whether
-it worked. Concretely, we benchmark six hosted editors (GPT Image~2 at two
-quality tiers, Nano Banana~Pro and~2, Seedream~5.0, and FLUX.2~[pro], plus a Qwen
-inpainting endpoint for the mask rung) on deep plane facelift and rhinoplasty,
-using real, licensed before/after photograph pairs, under a fixed seed and a full
-experimental matrix. Our contributions:
+We therefore evaluate how much off-target change can be prevented on the client.
+The pilot benchmark covers six editing configurations (GPT Image~2 at two quality
+tiers, Nano Banana~Pro and~2, Seedream~5.0 Lite, and FLUX.2~[pro]) plus a Qwen
+inpainting endpoint, two requested edit types, and publicly accessible
+before/after photograph pairs. A common random seed was sent with every request,
+though two endpoints ignore it (Sec.~\ref{sec:ladder}), and each matrix cell
+contains one generated output. Our
+contributions are:
 
 \begin{itemize}
   \item \textbf{A model-agnostic control ladder.} Three rungs over the same
@@ -48,26 +48,26 @@ experimental matrix. Our contributions:
   and native masked inpainting where supported. The composite adapts the final
   step of blended-diffusion editing to a setting where nothing inside the model
   is reachable (Sec.~\ref{sec:method}).
-  \item \textbf{A dual-failure-mode evaluation protocol.} ArcFace identity paired
-  with a CIELAB region-localization ratio that separately catches identity drift,
-  off-target beautification, and deceptive near-copies, plus a sanity check
-  against real post-operative photographs and a released surgeon rubric
+  \item \textbf{A two-part diagnostic protocol.} ArcFace identity is paired with
+  a CIELAB region-localization ratio and its target/off-target components. The
+  metrics detect identity loss, off-target pixel change, and near-copies, but do
+  not measure clinical plausibility. Postoperative photographs provide a separate
+  identity reference, and a surgeon rubric is released for future validation
   (Sec.~\ref{sec:protocol}).
-  \item \textbf{Benchmark findings.} Masked compositing pins edit localization at
-  a median of \MedLocComposite{} across all six editors where prompt-only control
-  reaches \MedLocPromptOnly{}; the identity floor separates the models, from
-  FLUX.2's aggressive edits that break it to the Nano Banana models' gentle ones
-  that never approach it; the mask-accepting endpoint is unexpectedly the
-  weakest rung; and two-procedure chains compose in either order
+  \item \textbf{A pilot benchmark.} Client-side compositing enforces off-mask
+  preservation across the tested editors without materially eliminating on-target
+  pixel change. The editors differ in edit strength and identity retention, while
+  the one tested mask-specific endpoint does not outperform compositing. A
+  two-order, single-face chain is reported only as a feasibility probe
   (Sec.~\ref{sec:results}).
 \end{itemize}
 
-To our knowledge this is the first controlled benchmark of off-the-shelf hosted
-image-editing APIs for identity-preserving surgical previews across multiple
-procedures. The claim is deliberately scoped: bespoke surgical simulators
+To our knowledge, prior work has not compared this client-side control ladder
+across multiple hosted black-box editors in cosmetic-surgery preview tasks. The
+scope is narrow: bespoke surgical simulators and composited rhinoplasty systems
 exist~\cite{knoedler2024rhinoplastygan,agarwal2026envisage}, and hosted editors
-have been benchmarked in other domains~\cite{qian2025giebench,gptimgeval2025};
-the combination of black-box APIs, client-side region confinement, and clinical
-ground truth is the gap this paper fills
+have been benchmarked in other domains~\cite{qian2025giebench,gptimgeval2025}.
+Our contribution is the hosted-API comparison and controlled intervention, not a
+new compositing algorithm, clinical outcome model, or clinical validation study
 (Sec.~\ref{sec:related}).\footnote{Analysis code and paper source:
 \url{https://github.com/suxrobGM/localize-dont-beautify}}

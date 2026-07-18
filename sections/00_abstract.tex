@@ -1,19 +1,21 @@
-Hosted image-editing models can follow the instruction ``perform a deep plane
-facelift,'' but they edit the whole face, returning a beauty-filter rendition
-that misrepresents both the patient and the operation. We benchmark six
-configurations of five off-the-shelf hosted editors (GPT Image~2 at two quality
-tiers, Nano Banana~Pro and~2, Seedream~5.0, FLUX.2~[pro]) on deep-plane-facelift and rhinoplasty
-previews over real before/after photograph pairs, under a control ladder that
-requires no model access: prompt-only, a client-side masked composite built from
-facial landmarks, and native masked inpainting. An automated protocol scores
-each edit for the two opposing failure modes (identity drift and off-target
-change) via ArcFace cosine and a CIELAB region-localization ratio, with real
-post-operative photographs as a sanity check. Across all \NumScoredEdits{}
-scored edits, masked compositing pins localization at a median of
-\MedLocComposite{} for every model, where prompt-only control reaches
-\MedLocPromptOnly{}; the identity floor separates the editors, from FLUX.2's
-aggressive edits that break it to the Nano Banana models' gentle ones that never
-approach it; the mask-accepting endpoint is unexpectedly the weakest rung; and
-two-procedure chains compose in either order. The results locate the capability
-gap for surgical previews in \emph{control} rather than in the models, and show
-the control can live entirely on the client.
+Hosted image editors often modify facial regions outside the anatomy named in a
+cosmetic-surgery preview request. We conduct a pilot benchmark of six hosted
+editing configurations and one mask-specific inpainting endpoint on facelift-style
+jaw--neck and rhinoplasty edits. The control ladder requires no access to model
+internals: prompt only, a landmark-derived client-side masked composite, and
+endpoint-native masked inpainting where available. Across \NumAttemptedEdits{}
+attempted cells, \NumScoredEdits{} outputs were scoreable. ArcFace cosine measures
+identity retention, while a CIELAB ratio measures change in the target region
+relative to a predefined facial keep zone. Among the \NumLocalizationFaces{}
+frontal faces for which regional scoring was available, compositing increased
+localization over the paired prompt-only output by a median of
+\MedPairedLocGain{} (95\% face-clustered bootstrap interval
+\PairedLocGainLow--\PairedLocGainHigh) while retaining comparable on-target pixel
+change. Model choice produced a visible edit-strength--identity trade-off, and the
+single tested inpainting endpoint did not outperform post-hoc compositing. Because
+off-mask preservation is enforced by construction, the localization result is a
+system property rather than evidence of clinical accuracy. No surgeon ratings were
+collected, each cell contains one generated output, and postoperative photographs
+serve only as identity references. The evidence therefore supports client-side
+compositing as a practical control for off-target pixel changes, not as validation
+of surgical outcome prediction.

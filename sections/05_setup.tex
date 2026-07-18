@@ -3,54 +3,62 @@
 
 \begin{table}[t]
   \centering
-  \caption{Models in the study. All run behind fal.ai endpoints; cost is the
-  provider's per-image estimate at the pinned date.}
+  \caption{Endpoints in the study. All run behind fal.ai; cost is the provider's
+  estimate on July 16, 2026. Aliases may change after that date.}
   \label{tab:models}
   \resizebox{\columnwidth}{!}{\input{tables/setup_models}}
 \end{table}
 
-\textbf{Models.} Table~\ref{tab:models} lists the lineup of six hosted editors
-(OpenAI GPT Image~2 at two quality tiers~\cite{openai2026gptimage2}, Google's
-Nano Banana~Pro and Nano
-Banana~2~\cite{google2025nanobananapro,google2025nanobanana}, ByteDance
-Seedream~5.0~\cite{seedream5_2026,seedream4_2025}, and
-FLUX.2~[pro]~\cite{bfl2025flux2,bfl2025fluxkontext}), plus Qwen-Image-Edit as a hosted
-inpainting endpoint for the masked-inpaint rung~\cite{wu2025qwenimage}. Hosted
-models are moving targets, so every run records its date and the exact endpoint
-identifier.
+\textbf{Models.} Table~\ref{tab:models} lists six hosted editing configurations:
+OpenAI GPT Image~2 at two quality tiers~\cite{openai2026gptimage2}, Google's Nano
+Banana~Pro and Nano Banana~2~\cite{google2025nanobananapro,google2026nanobanana2},
+ByteDance Seedream~5.0 Lite~\cite{seedream5lite_2026,seedream4_2025}, and
+FLUX.2~[pro]~\cite{bfl2025flux2,bfl2025fluxkontext}. A Qwen-Image-Edit endpoint
+provides the masked-inpaint rung~\cite{wu2025qwenimage}. Hosted services are moving
+targets, so every run records its date and endpoint alias. The provider did not
+expose immutable revisions for every model.
 
-\textbf{Data.} The full pool contains real, licensed before/after photograph
-pairs: 12 frontal deep-plane-facelift inputs (11 with a paired post-operative
-photograph) and 14 rhinoplasty inputs (10 profile views and 4 frontal
-cross-views, all paired). The benchmark matrix uses 8 facelift faces and 8
-rhinoplasty faces (the 4 frontal cross-views, which the regional metric can
-score, plus 4 profiles that contribute identity and ground-truth evidence).
-Faces are drawn independently per procedure; no person appears in both sets.
-One extreme-profile rhinoplasty face defeats the identity detector on every
-edit (Sec.~\ref{sec:failures}), so its cells drop out of all statistics:
-with the chained-experiment face included, \NumFacesScored{} distinct faces
-contribute the scored edits, and the rhinoplasty rows of
-Table~\ref{tab:main} accordingly hold 7 faces rather than 8.
-Images are normalized to $1024^2$ with padding. The datasets are licensed for AI
-use and republication; no private patient data was used at any point. Synthetic
-candidate faces were piloted early in the project and abandoned for quality
-reasons, so all results below are on real faces.
+\textbf{Data.} The full pool contains real, publicly accessible before/after
+photograph pairs: 12 frontal facelift inputs (11 with a paired postoperative
+photograph) and 14 rhinoplasty inputs (10 profile views and 4 frontal cross-views,
+all paired). The benchmark matrix uses 8 facelift faces and 8 rhinoplasty faces
+(the 4 frontal cross-views, which the regional metric can score, plus 4 profiles
+that contribute identity and postoperative-reference evidence). Faces are drawn
+independently per requested edit type; no person appears in both sets. One
+extreme-profile rhinoplasty face defeats the identity detector on every edit
+(Sec.~\ref{sec:failures}), so the main analysis contains \NumPrimaryFaces{}
+faces. With the separate chained-experiment face included, \NumFacesScored{}
+distinct faces contribute scoreable outputs, and the rhinoplasty rows of
+Table~\ref{tab:main} hold 7 rather than 8 faces.
+
+Images are normalized to $1024^2$ with padding. These are identifiable,
+health-related photographs even when publicly viewable. The exact source terms,
+republication permission, and institutional-review determination must be
+documented before archival submission (Sec.~\ref{sec:ethics}). No private
+clinical records were used.
 
 \textbf{Protocol.} Runs expand a Cartesian matrix of faces $\times$ models
-$\times$ procedures $\times$ controls with a fixed seed, so every cell exists and
-none can be quietly dropped: the gallery renderer shows the full grid, and model
-failures are recorded in the results table rather than raised. Each run directory
-is immutable and stores the resolved configuration and the git commit that produced
-it; output filenames encode the full cell key, which is also the join key for
-scoring. Generation and scoring are decoupled, so metrics can be recomputed without
-touching images. The reported results come from a registered set of matrix runs
-executed together, after the pipeline was frozen; earlier development runs are
-retained but not pooled into the statistics. A final experiment chains two
-procedures on the same face in both orders (rhinoplasty then facelift, and the
-reverse) to test whether region-confined stages compose. Across all scored edits
-the median latency is \MedLatency{}\,s and the median cost \$\MedCost{} per
-image.
+$\times$ requested edit types $\times$ controls. A common seed is passed to
+every endpoint; the GPT Image~2 and Seedream~5.0 Lite schemas have no seed field
+and ignore it. One output is generated per cell, so the study does not estimate
+within-endpoint stochastic variation. The gallery renderer shows attempted cells,
+and provider or scoring failures remain in the run records. Each immutable run
+directory stores its resolved configuration and git commit; output filenames
+encode the full cell key used for scoring. Generation and scoring are decoupled,
+so metrics can be recomputed without new API requests.
 
-The paper itself is generated from this provenance: every number in the text and
-tables is produced by an aggregation script from the run records, with duplicate
-cells resolved by keeping the most completely scored row.
+The reported results come from a designated set of matrix runs executed after the
+pipeline was frozen; earlier development runs are retained but not pooled. One
+additional experiment applies rhinoplasty and facelift-style edits to the same
+face in both orders as a feasibility check. The full design attempted
+\NumAttemptedEdits{} outputs: \NumScoredEdits{} were scoreable and
+\NumExcludedEdits{} were unavailable because one inpainting request was rejected
+and one extreme-profile face failed identity detection across 13 cells. Across
+scoreable outputs, median latency is \MedLatency{}\,s and median provider cost is
+\$\MedCost{} per image.
+
+The paper's numeric values are generated by an aggregation script from the run
+records. Duplicate stems are resolved by keeping the row with the most complete
+metric set. The public repository includes the canonical score table and analysis
+scripts, but not the source photographs or full generation pipeline; it therefore
+supports audit of reported summaries rather than end-to-end reproduction.

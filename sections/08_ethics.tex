@@ -1,33 +1,31 @@
 \section{Ethics and Privacy}
 \label{sec:ethics}
 
-\textbf{Data.} All face images come from commercially licensed before/after
-datasets whose terms cover AI processing and reproduction in this publication; no
-private or non-consented patient data was used at any stage, and images sent to
-hosted endpoints were transmitted inline without server-side retention options
-enabled. The figures reproduce faces under that license.
+\textbf{Identifiable images.} The study uses publicly accessible before/after
+photographs rather than private clinical records. Public access, however, does not
+by itself establish consent for research, republication, or transmission to hosted
+AI services. Before archival submission, the authors must record each source and
+its terms, confirm figure-republication and hosted-processing rights, provide any
+required attribution, and obtain an institutional IRB or exemption determination.
+The current paper should not be read as documenting those approvals.
 
-\textbf{No cherry-picking.} Every experiment runs its full face $\times$ model
-$\times$ procedure $\times$ control matrix under a fixed seed into an immutable,
-git-stamped run directory,
-and the scoring gallery renders every cell. The examples in
-Figs.~\ref{fig:teaser} and \ref{fig:grid} were chosen for print legibility, but
-the statistics in Table~\ref{tab:main} include every scored edit, failures and
-all.
+\textbf{Accounting.} The design attempted every cell in the specified matrix.
+Table~\ref{tab:main} contains every scoreable output, while one rejected request
+and 13 detector failures are reported explicitly rather than silently omitted.
+Qualitative figures are selected for legibility and are not evidence of prevalence;
+the canonical score table supports quantitative auditing.
 
 \textbf{Intended use and misuse.} A preview is an expectation-setting aid, not a
-promised outcome. The clinical literature has debated morphing on exactly this
-point for decades~\cite{agarwal2007morph}: an over-idealized preview can create
-expectations no surgeon can meet, which is why our prompts ask for realistic
-tissue repositioning rather than idealization, and why the rubric reserves a
-safety-of-expectation axis. The same editing capability applied to a photo of a
-non-consenting person is straightforwardly harmful; the pipeline described here
-does nothing to enable that beyond what the underlying public endpoints already
-permit, but deployments should verify subject consent as a precondition, and model
-documentation practices~\cite{mitchell2019modelcards} apply to systems built on
-these APIs just as they do to the models themselves.
+promised outcome. Over-idealized previews can create expectations that surgery
+cannot meet~\cite{agarwal2007morph}. The present system has not been clinically
+validated and should not guide treatment or be shown as a predicted outcome. The
+same editing capability applied to a non-consenting person's photograph is
+harmful. Any deployment should verify subject authorization, disclose synthetic
+content and uncertainty, retain the original image, and log the endpoint and
+settings. Model-card documentation practices~\cite{mitchell2019modelcards} apply
+to systems assembled from hosted APIs as well as to their component models.
 
-\textbf{Fairness.} Because the demographic makeup of the test set is unrecorded,
-we make no claim that the reported behavior holds uniformly across
-populations~\cite{buolamwini2018gendershades}; a stratified test set is a
-precondition for any clinical deployment.
+\textbf{Fairness.} The demographic makeup of the test set is unrecorded, and face
+analysis systems can exhibit demographic performance gaps
+~\cite{buolamwini2018gendershades}. A stratified evaluation and failure analysis
+are prerequisites for any clinical-use claim.
