@@ -62,12 +62,16 @@ contributions are:
   (Sec.~\ref{sec:results}).
 \end{itemize}
 
-To our knowledge, prior work has not compared this client-side control ladder
-across multiple hosted black-box editors in cosmetic-surgery preview tasks. The
-scope is narrow: bespoke surgical simulators and composited rhinoplasty systems
-exist~\cite{knoedler2024rhinoplastygan,agarwal2026envisage}, and hosted editors
-have been benchmarked in other domains~\cite{qian2025giebench,gptimgeval2025}.
-Our contribution is the hosted-API comparison and controlled intervention, not a
-new compositing algorithm, clinical outcome model, or clinical validation study
-(Sec.~\ref{sec:related}).\footnote{Analysis code and paper source:
+To our knowledge, this is the first controlled comparison of client-side region
+confinement across multiple hosted, black-box editing APIs for
+cosmetic-surgery previews. The setting is what makes the question new: bespoke
+surgical simulators and composited rhinoplasty systems
+exist~\cite{knoedler2024rhinoplastygan,agarwal2026envisage}, but they assume a
+model the operator hosts, and hosted editors have been benchmarked in other
+domains~\cite{qian2025giebench,gptimgeval2025} without control as the
+manipulated variable. When the editor is a black-box endpoint, every
+internals-based localization method is off the table, so whatever control
+exists must live on the client; measuring how much that recovers is our
+contribution, not a new compositing algorithm, clinical outcome model, or
+clinical validation study (Sec.~\ref{sec:related}).\footnote{Analysis code and paper source:
 \url{https://github.com/suxrobGM/localize-dont-beautify}}

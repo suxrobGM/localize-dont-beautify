@@ -16,9 +16,13 @@ presets, ground-truth-relative ArcFace analysis, and a mask-decomposed SurgicalS
 It directly establishes that full-face identity metrics are confounded after hard
 compositing. Our paper must not imply stronger clinical validation than Envisage.
 
-The remaining distinction is narrow: multiple hosted endpoints, two requested edit
-types, and prompt-only/client-composite/native-mask controls applied as a systems
-intervention. The current study is much smaller and has no surgeon ratings.
+The distinction is the setting, not scale: Envisage assumes an open-weight
+inpainter the operator hosts, so neither its pipeline nor any internals-based
+localization method transfers to a hosted black-box endpoint - which is exactly
+the setting we study, with multiple hosted endpoints, two requested edit types,
+and prompt-only/client-composite/native-mask control as the manipulated variable.
+The current study is much smaller and has no surgeon ratings; do not imply
+stronger clinical validation than Envisage.
 
 ## Required claim boundaries
 

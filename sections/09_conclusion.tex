@@ -1,21 +1,25 @@
 \section{Conclusion}
 \label{sec:conclusion}
 
-In this pilot, text instructions alone did not prevent hosted image editors from
-changing a predefined facial keep zone. A landmark-derived mask, alignment, and
-client-side feathered composite reduced that measured off-target change while
-retaining similar target-region pixel change. This is useful engineering evidence:
-off-mask pixel preservation can be enforced outside a black-box model. The tested
-Qwen inpainting endpoint did not outperform that post-hoc control, but one endpoint
-cannot support a general conclusion about masked inpainting.
+In this pilot, text instructions alone did not prevent hosted image editors
+from changing a predefined facial keep zone. A landmark-derived mask,
+alignment, and client-side feathered composite reduced that measured off-target
+change while retaining similar target-region pixel change, uniformly across the
+six editors tested and at a median provider cost of \$\MedCost{} per image. The
+tested Qwen inpainting endpoint did not outperform that post-hoc control, but
+one endpoint cannot support a general conclusion about masked inpainting.
 
-The study does not validate cosmetic-surgery outcome prediction. The main analysis
-contains \NumPrimaryFaces{} faces, one generated output per cell, no surgeon
-ratings, limited profile support, and no metric of improvement over the original
-image relative to postoperative anatomy. The next study should add repeated
-generations, pose-robust whole-image localization, input-relative postoperative
-metrics, multiple blinded surgeons with inter-rater agreement, a larger
-demographically characterized cohort, documented image-use authorization, and
-immutable or self-hosted model baselines. Until then, client-side compositing
-should be understood as a control for off-target pixel changes, not as evidence
-that the resulting preview is clinically accurate or safe for patient counseling.
+The study does not validate cosmetic-surgery outcome prediction, and
+client-side compositing should be read as a control for off-target pixel
+changes, not as evidence that a preview is clinically accurate or safe for
+patient counseling. The main analysis contains \NumPrimaryFaces{} faces, one
+generated output per cell, no surgeon ratings, limited profile support, and no
+metric of improvement over the original image relative to postoperative
+anatomy. The next study should add repeated generations, pose-robust
+whole-image localization, input-relative postoperative metrics, multiple
+blinded surgeons with inter-rater agreement, a larger demographically
+characterized cohort, documented image-use authorization, and immutable or
+self-hosted model baselines. What this pilot does establish is the systems
+point: for editors that expose no internals, the missing capability for
+region-confined previews is control, and that control can live entirely on the
+client.

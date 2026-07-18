@@ -16,12 +16,14 @@ systematic review surveys the area~\cite{stephanian2024fpsamreview}. Closest to 
 Envisage~\cite{agarwal2026envisage} combines a local FLUX-based inpainter with
 MediaPipe masks, hard compositing, and a mask-decomposed score built on masked
 LPIPS~\cite{zhang2018lpips}. It evaluates rhinoplasty on 211 cases and shows why
-full-face ArcFace scores are confounded after compositing. We address a narrower
-systems question: six hosted black-box editing configurations rather than one
-open-weight pipeline, two requested edit types, and control itself as the
-manipulated variable. We do not reproduce Envisage's clinical presets,
-mask-decomposed fidelity score, sample size, or ground-truth-relative analysis;
-those differences limit direct quality comparisons. Lim et
+full-face ArcFace scores are confounded after compositing. We address a
+different systems question: Envisage operates an open-weight inpainter it
+hosts itself, whereas our editors are black-box endpoints where neither its
+pipeline nor any internals-based localization method applies. We compare six
+such configurations on two requested edit types with control itself as the
+manipulated variable. Our study is smaller: we do not reproduce Envisage's
+clinical presets, mask-decomposed fidelity score, sample size, or
+ground-truth-relative analysis, which limits direct quality comparisons. Lim et
 al.~\cite{lim2023generativecosmetic} prompt text-to-image tools about the same
 procedures but generate generic faces rather than editing a patient's photo.
 
