@@ -27,10 +27,10 @@ Reads every eligible `results.csv`, normalizes the older column names, keeps
 rows that succeeded and were actually scored, and dedupes repeated cells (the
 row with the most populated metrics wins, latest run breaks ties). Writes:
 
-- `data/canonical_rows.csv` - the deduped row set, with a `run_id` column so
+- `data/canonical_rows.csv`: the deduped row set, with a `run_id` column so
   any number can be traced back to its source run
-- `tables/main_results.tex` and `tables/setup_models.tex` - table bodies
-- `tables/numbers.tex` - one `\newcommand` per number quoted in the prose
+- `tables/main_results.tex` and `tables/setup_models.tex`: table bodies
+- `tables/numbers.tex`: one `\newcommand` per number quoted in the prose
 
 That last file is the reason the paper text contains no hand-typed metrics: the
 prose cites macros like `\MedLocComposite`, and rebuilding regenerates them.
@@ -48,8 +48,8 @@ the qualitative grid, the six-editor model strip, and the profile-rhinoplasty
 strip that places each input beside a model's edit and the real post-operative
 photograph. Which faces appear is controlled by `figure_stems.py`, and each
 face carries a `verified` flag tied to the license checklist in
-`docs/real_face_checklist.md` - a face whose source hasn't cleared the
-checklist simply doesn't show up in the figures.
+`docs/real_face_checklist.md`. A face whose source hasn't cleared the checklist
+simply doesn't show up in the figures.
 
 ## check_citations.py
 

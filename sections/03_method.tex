@@ -63,9 +63,9 @@ blend: $\mathrm{out} = x\,(1-w) + e\,w$, where $x$ is the input, $e$ the aligned
 edit, and $w$ a per-pixel weight from the feathered mask.
 
 The composite mask is shaped so its boundary never crosses visually busy texture.
-Relative to the metric region it is eroded off the face silhouette, clipped medial
-of the ears so the seam avoids the sideburns, extended further down the neck so a
-narrowed jawline blends into shadow or clothing, and feathered with a wide
+Relative to the metric region, we erode it off the face silhouette, clip it medial
+of the ears so the seam avoids the sideburns, and extend it further down the neck
+so a narrowed jawline blends into shadow or clothing. The feather is a wide
 smoothstep ramp over the signed distance to the mask boundary rather than a
 Gaussian blur. All widths are inter-ocular fractions.
 

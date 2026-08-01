@@ -17,8 +17,7 @@ FIGURES_DIR = PAPER_ROOT / "figures" / "generated"
 DATA_DIR = PAPER_ROOT / "data"
 
 # Runs whose rows are eligible for the paper: the registered full-matrix runs
-# (2026-07-16) plus the chained-procedures probe. Earlier runs were development
-# iterations superseded cell-for-cell by the matrix; None = accept every run.
+# (2026-07-16) plus the chained-procedures probe
 CANONICAL_RUN_PREFIXES: list[str] | None = ["20260716-", "20260709-035453"]
 
 # Metric columns carried into the canonical row set.

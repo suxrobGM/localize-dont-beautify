@@ -4,12 +4,12 @@ LaTeX source and analysis artifacts for *"Localize, Don't Beautify: Client-Side
 Control of Hosted Image Editors for Cosmetic Surgery Previews"* (IEEE
 conference format).
 
-This pilot evaluates whether a landmark-derived, client-side composite can prevent
+This pilot tests whether a landmark-derived, client-side composite can prevent
 hosted image editors from changing pixels outside a requested facial region. It
-does: preservation is enforced by construction while target-region pixel change is
-largely retained. The study does **not** establish clinical plausibility or predict
-surgical outcomes; it contains 15 main-analysis faces, one output per cell, and no
-surgeon ratings.
+can: the composite enforces preservation by construction, and target-region pixel
+change is largely retained. The study does not establish clinical plausibility or
+predict surgical outcomes; it contains 15 main-analysis faces, one output per cell,
+and no surgeon ratings.
 
 ## Repository scope
 
