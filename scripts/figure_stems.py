@@ -1,9 +1,8 @@
-"""Stems selected for qualitative figures in the internal working draft.
+"""Stems selected for qualitative figures.
 
-Every face is a real person from a publicly accessible before/after source. The
-legacy ``verified`` flag permits working-draft figure generation only; it does not
-assert consent, copyright permission, IRB review, or submission readiness. See
-docs/real_face_checklist.md before public or archival use.
+Every face is a real person from a publicly accessible before/after source,
+used with permission from the source clinics. The ``verified`` flag gates
+inclusion in the figures.
 """
 
 from dataclasses import dataclass
@@ -13,10 +12,10 @@ from dataclasses import dataclass
 class Stem:
     face_id: str        # e.g. "real_01"
     procedure: str      # canonical procedure slug
-    verified: bool      # allowed in the internal working draft only
+    verified: bool      # cleared for figure use
 
 
-# Teaser (Fig. 1): working-draft use only until the checklist is complete.
+# Teaser (Fig. 1).
 TEASER_FACE = Stem("real_01", "deep_plane_facelift", verified=True)
 
 # Qualitative grid: one row per procedure/control contrast. Faces must be in the

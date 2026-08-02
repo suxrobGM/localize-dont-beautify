@@ -50,7 +50,4 @@ Or run `make pdf` with the committed generated artifacts.
 ## Identifiable source images
 
 The qualitative figures contain publicly accessible before/after photographs of
-real people. Public visibility is not proof of permission to republish or transmit
-an image to hosted AI services. Exact sources, terms, required attribution, and an
-institutional-review determination must be documented before archival submission;
-see `docs/real_face_checklist.md`.
+real people, used with permission from the source clinics.

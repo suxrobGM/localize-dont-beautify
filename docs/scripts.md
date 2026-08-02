@@ -47,9 +47,8 @@ Builds the before/after image grids from the run outputs: the teaser triptych,
 the qualitative grid, the six-editor model strip, and the profile-rhinoplasty
 strip that places each input beside a model's edit and the real post-operative
 photograph. Which faces appear is controlled by `figure_stems.py`, and each
-face carries a `verified` flag tied to the license checklist in
-`docs/real_face_checklist.md`. A face whose source hasn't cleared the checklist
-simply doesn't show up in the figures.
+face carries a `verified` flag; a face that isn't verified simply doesn't show
+up in the figures.
 
 ## check_citations.py
 

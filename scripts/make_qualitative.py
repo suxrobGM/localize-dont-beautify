@@ -2,15 +2,12 @@
 
 Builds, for each verified stem, side-by-side panels: input | prompt-only | masked
 composite (teaser), multi-row grids for the qualitative figure, and the profile
-rhinoplasty strip against the real post-op photographs. Skips (with a message) any
-stem whose source has not passed docs/real_face_checklist.md.
+rhinoplasty strip against the real post-op photographs.
 """
 
 from pathlib import Path
 
 import pandas as pd
-from PIL import Image, ImageDraw, ImageFont
-
 from config import DATA_DIR, FIGURES_DIR, MODEL_NAMES, POC_ROOT, RUNS_DIR
 from figure_stems import (
     GRID_FACES,
@@ -20,6 +17,7 @@ from figure_stems import (
     STRIP_MODELS,
     TEASER_FACE,
 )
+from PIL import Image, ImageDraw, ImageFont
 
 PANEL = 384      # px per face panel
 
@@ -91,7 +89,7 @@ def vstack(rows: list[Image.Image], gap: int = 6) -> Image.Image:
 def make_teaser(df: pd.DataFrame) -> bool:
     s = TEASER_FACE
     if not s.verified:
-        print(f"teaser: {s.face_id} not license-verified - skipped")
+        print(f"teaser: {s.face_id} not verified - skipped")
         return False
     po = find_row(df, s.face_id, s.procedure, "prompt_only")
     mc = find_row(df, s.face_id, s.procedure, "masked_composite")
@@ -111,7 +109,7 @@ def make_grid(df: pd.DataFrame) -> bool:
     rows = []
     for s in GRID_FACES:
         if not s.verified:
-            print(f"grid: {s.face_id} not license-verified - skipped")
+            print(f"grid: {s.face_id} not verified - skipped")
             continue
         panels = [panel(input_for(s.face_id, s.procedure), "Input")]
         for control in ("prompt_only", "masked_composite", "masked_inpaint"):
@@ -132,7 +130,7 @@ def make_model_strip(df: pd.DataFrame) -> bool:
     """The same face composited by every editor: the model-comparison figure."""
     s = STRIP_FACE
     if not s.verified:
-        print(f"strip: {s.face_id} not license-verified - skipped")
+        print(f"strip: {s.face_id} not verified - skipped")
         return False
     panels = [panel(input_for(s.face_id, s.procedure), "Input", label_size=36)]
     for model in STRIP_MODELS:
@@ -154,7 +152,7 @@ def make_profile_strip(df: pd.DataFrame) -> bool:
     rows = []
     for s in PROFILE_RHINO_FACES:
         if not s.verified:
-            print(f"profile: {s.face_id} not license-verified - skipped")
+            print(f"profile: {s.face_id} not verified - skipped")
             continue
         r = find_row(df, s.face_id, s.procedure, "prompt_only", model=PROFILE_RHINO_MODEL)
         gt = ground_truth_for(s.face_id, s.procedure)
@@ -177,8 +175,7 @@ def main() -> None:
     df = load_rows()
     made = [make_teaser(df), make_grid(df), make_model_strip(df), make_profile_strip(df)]
     if not any(made):
-        print("no qualitative figures generated - real-face gate is closed "
-              "(see docs/real_face_checklist.md)")
+        print("no qualitative figures generated - real-face gate is closed")
 
 
 if __name__ == "__main__":

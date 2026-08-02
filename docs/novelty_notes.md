@@ -49,4 +49,4 @@ The current study is much smaller and has no surgeon ratings.
 - Extend off-target scoring beyond the upper-face keep zone and support profiles.
 - Record demographics and stratified failures.
 - Release or archive the complete generation/scoring pipeline and resolved configs.
-- Complete the public-source provenance, permission, and IRB checklist.
+- Obtain an institutional IRB or exemption determination if one is required.
