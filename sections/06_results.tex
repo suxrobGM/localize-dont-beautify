@@ -16,7 +16,7 @@
   \centering
   \includegraphics[width=\columnwidth]{scatter_identity_localization}
   \caption{Every scoreable output placed by the two automated diagnostics.
-  Compositing yields localization near 1 because it preserves off-mask pixels by
+  Compositing produces localization near 1 because it preserves off-mask pixels by
   construction; prompt-only outputs and the tested inpainter change more of the
   measured keep zone. \NumBelowFloor{} outputs fall below the 0.6 identity
   reference, \NumBelowFloorFlux{} from FLUX.2~[pro].}
@@ -31,8 +31,8 @@ contrast; no population-level or clinical significance is claimed.
 
 \subsection{Off-target preservation}
 
-Masked compositing yields a localization ratio of \MedLocComposite{} (range
-\LocCompositeMin--\LocCompositeMax) across the six primary editing
+Masked compositing produces a median localization ratio of \MedLocComposite{}
+(range \LocCompositeMin--\LocCompositeMax) across the six primary editing
 configurations. Their prompt-only outputs have a median of \MedLocPromptOnly{}
 (range \LocPromptOnlyMin--\LocPromptOnlyMax). Across
 \NumLocalizationFaces{} frontal faces, the within-face/model median gain is
@@ -44,7 +44,7 @@ off-target change is \MedPairedOffReduction{} (interval
 The component values give the same descriptive result: median
 $\Delta E_{\mathrm{off}}$ is \MedOffPromptOnly{} for prompt-only outputs and
 \MedOffComposite{} after compositing, while median
-$\Delta E_{\mathrm{tgt}}$ remains \MedTgtPromptOnly{} and
+$\Delta E_{\mathrm{tgt}}$ is \MedTgtPromptOnly{} and
 \MedTgtComposite{}, respectively. Prompt instructions alone did not preserve the
 measured keep zone. Post-hoc compositing did so because preservation is enforced
 by the blend; this result does not assess anatomical correctness inside the mask
@@ -58,7 +58,7 @@ scoreable outputs fall below it, and \NumBelowFloorFlux{} come from
 FLUX.2~[pro]. FLUX.2 also produces the largest prompt-only target-region pixel
 changes (median $\Delta E_{\mathrm{tgt}}$ \MedTgtFluxPromptOnly) and has a
 prompt-only identity median of \MedIdentityFluxPromptOnly{}, with a minimum of
-\IdentityMinAll{}. The Nano Banana configurations occupy the other end of this
+\IdentityMinAll{}. The Nano Banana configurations are at the other end of this
 descriptive spectrum, with identity \MedIdentityNanoBanana{} and median target
 change \MedTgtNanoBanana{}. GPT Image~2 and Seedream~5.0 Lite fall between.
 

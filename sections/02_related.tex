@@ -3,8 +3,9 @@
 
 \textbf{Surgical outcome simulation.} Preoperative visualization predates
 generative models by decades: manual computer morphing measurably improves
-rhinoplasty patient satisfaction~\cite{sharp2002computerimaging}, its
-expectation-management risks are equally well documented~\cite{agarwal2007morph},
+rhinoplasty patient satisfaction~\cite{sharp2002computerimaging}, the risks of
+setting expectations too high are equally well
+documented~\cite{agarwal2007morph},
 and 3D simulation accuracy correlates with postoperative
 satisfaction~\cite{yamamichi2025crisalix,threedvr2026aesthetic}. Learning-based
 successors train bespoke models per procedure: a GAN trained on 3{,}030 paired
@@ -18,9 +19,9 @@ MediaPipe masks, hard compositing, and a mask-decomposed score built on masked
 LPIPS~\cite{zhang2018lpips}. It evaluates rhinoplasty on 211 cases and shows why
 full-face ArcFace scores are confounded after compositing. We address a
 different systems question: Envisage operates an open-weight inpainter it
-hosts itself, whereas our editors are black-box endpoints where neither its
-pipeline nor any internals-based localization method applies. We compare six
-such configurations on two requested edit types with control itself as the
+hosts itself, whereas our editors are black-box endpoints, and neither its
+pipeline nor any internals-based localization method applies to them. We compare
+six such configurations on two requested edit types with control itself as the
 manipulated variable. Our study is smaller: we do not reproduce Envisage's
 clinical presets, mask-decomposed fidelity score, sample size, or
 ground-truth-relative analysis, which limits direct quality comparisons. Lim et
@@ -37,7 +38,7 @@ and Plug-and-Play inject attention or
 features~\cite{hertz2023prompt2prompt,tumanyan2023plugandplay}. A hosted endpoint
 exposes none of those surfaces. Our masked composite is deliberately the
 post-hoc remnant of this family, the final pixel-space blend applied after the
-API returns, and the paper measures how far that remnant carries.
+API returns, and we measure how much control that remnant still provides.
 
 \textbf{Benchmarking instruction-guided editors.} General-domain benchmarks are
 plentiful~\cite{brooks2023instructpix2pix,zhang2023magicbrush,wang2023editbench,
