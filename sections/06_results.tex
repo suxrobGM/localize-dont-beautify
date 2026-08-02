@@ -33,7 +33,7 @@ contrast; no population-level or clinical significance is claimed.
 
 Masked compositing produces a median localization ratio of \MedLocComposite{}
 (range \LocCompositeMin--\LocCompositeMax) across the six primary editing
-configurations. Their prompt-only outputs have a median of \MedLocPromptOnly{}
+configurations (Fig.~\ref{fig:strips}a). Their prompt-only outputs have a median of \MedLocPromptOnly{}
 (range \LocPromptOnlyMin--\LocPromptOnlyMax). Across
 \NumLocalizationFaces{} frontal faces, the within-face/model median gain is
 \MedPairedLocGain{} (95\% face-clustered bootstrap interval
@@ -60,7 +60,8 @@ changes (median $\Delta E_{\mathrm{tgt}}$ \MedTgtFluxPromptOnly) and has a
 prompt-only identity median of \MedIdentityFluxPromptOnly{}, with a minimum of
 \IdentityMinAll{}. The Nano Banana configurations are at the other end of this
 descriptive spectrum, with identity \MedIdentityNanoBanana{} and median target
-change \MedTgtNanoBanana{}. GPT Image~2 and Seedream~5.0 Lite fall between.
+change \MedTgtNanoBanana{}. GPT Image~2 and Seedream~5.0 Lite fall between
+(Fig.~\ref{fig:strips}b).
 
 Fig.~\ref{fig:modelstrip} shows the same face after compositing outputs from each
 editor. Prompt-only identity is the model-level diagnostic
@@ -79,11 +80,12 @@ ordering is interpreted as clinical quality.
 
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.92\textwidth]{box_localization_identity}
+  \includegraphics[width=0.92\textwidth]{strip_localization_identity}
   \caption{(a) Localization by control, models pooled. (b) Identity by model,
-  controls pooled; the dashed line is the heuristic 0.6 reference. Boxes summarize
-  repeated outputs, not independent patient samples.}
-  \label{fig:boxes}
+  controls pooled; the dashed line is the heuristic 0.6 reference. Each point is
+  one scoreable output (horizontal bar: median); points are repeated outputs,
+  not independent patient samples.}
+  \label{fig:strips}
 \end{figure*}
 
 \subsection{The tested inpainting endpoint}

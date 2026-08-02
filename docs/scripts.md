@@ -37,8 +37,8 @@ prose cites macros like `\MedLocComposite`, and rebuilding regenerates them.
 
 ## make_figures.py
 
-The three quantitative figures (identity-vs-localization scatter, boxplots,
-ground-truth strip plot) as column-width PDFs. `SOURCE_DATE_EPOCH` is pinned so
+The three quantitative figures (identity-vs-localization scatter, jittered
+dot strips, ground-truth strip plot) as column-width PDFs. `SOURCE_DATE_EPOCH` is pinned so
 rebuilding produces byte-identical files and `git status` stays clean.
 
 ## make_qualitative.py and figure_stems.py

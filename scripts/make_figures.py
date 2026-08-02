@@ -14,10 +14,10 @@ import matplotlib
 matplotlib.use("Agg")
 
 import matplotlib.pyplot as plt
+import numpy as np
 import pandas as pd
-from matplotlib.axes import Axes
-
 from config import CONTROL_NAMES, DATA_DIR, FIGURES_DIR, MODEL_NAMES
+from matplotlib.axes import Axes
 
 COL_W = 3.45  # inches, ~IEEEtran \columnwidth
 
@@ -30,15 +30,7 @@ CONTROL_COLOR = {
     "masked_composite": "#008300",  # green
     "masked_inpaint": "#e87ba4",    # magenta
 }
-MODEL_MARKER = {
-    "gpt_image_2": "o",
-    "gpt_image_2_low": "v",
-    "nano_banana_pro": "^",
-    "nano_banana_2": "<",
-    "seedream_5_0": "s",
-    "flux_2_pro": "P",
-    "qwen_image_edit_inpaint": "D",
-}
+JITTER_SEED = 20260716  # fixed so rebuilds stay byte-reproducible
 
 plt.rcParams.update({
     "font.size": 8,
@@ -64,14 +56,18 @@ def style_axes(ax: Axes) -> None:
 
 
 def fig_scatter(df: pd.DataFrame) -> None:
-    """Identity vs localization: the two failure modes in one plot."""
+    """Identity vs localization: the two failure modes in one plot.
+
+    Color encodes the control rung only; the per-model breakdown lives in the
+    dot-strip figure and Table 2, so the model dimension is annotated rather
+    than encoded (seven marker shapes were illegible at column width).
+    """
     d = df.dropna(subset=["identity_cosine", "change_localization"])
-    fig, ax = plt.subplots(figsize=(COL_W, 2.7))
-    for key, g in d.groupby(["control", "model"]):
-        control, model = (str(k) for k in key)
+    fig, ax = plt.subplots(figsize=(COL_W, 2.9))
+    for control in [c for c in CONTROL_COLOR if c in set(d.control)]:
+        g = d[d.control == control]
         ax.scatter(
-            g.change_localization, g.identity_cosine,
-            s=22, marker=MODEL_MARKER.get(model, "o"),
+            g.change_localization, g.identity_cosine, s=20, marker="o",
             facecolors=CONTROL_COLOR[control], edgecolors="white",
             linewidths=0.5, zorder=3, alpha=0.9,
         )
@@ -83,6 +79,14 @@ def fig_scatter(df: pd.DataFrame) -> None:
     ax.annotate("region-confined", xy=(0.99, 0.72), xytext=(0.8, 0.62),
                 ha="center", fontsize=7, color=INK,
                 arrowprops={"arrowstyle": "-", "color": MUTED, "lw": 0.6})
+    low = d[d.identity_cosine < 0.6]
+    if len(low):
+        share = (low.model == "flux_2_pro").mean()
+        label = "low identity,\nmostly FLUX.2 [pro]" if share >= 0.5 else "low identity"
+        ax.annotate(label,
+                    xy=(low.change_localization.median(), low.identity_cosine.median()),
+                    xytext=(0.1, 0.44), ha="center", fontsize=7, color=INK,
+                    arrowprops={"arrowstyle": "-", "color": MUTED, "lw": 0.6})
     ax.set_xlabel(r"Edit localization  $\Delta E_{\mathrm{tgt}}/(\Delta E_{\mathrm{tgt}}+\Delta E_{\mathrm{off}})$")
     ax.set_ylabel("ArcFace identity cosine")
     ax.set_xlim(-0.02, 1.04)
@@ -94,46 +98,40 @@ def fig_scatter(df: pd.DataFrame) -> None:
                    markerfacecolor=c, markeredgecolor="white", label=CONTROL_NAMES[k])
         for k, c in CONTROL_COLOR.items() if k in set(d.control)
     ]
-    short = {
-        "gpt_image_2": "GPT-2", "gpt_image_2_low": "GPT-2 low",
-        "nano_banana_pro": "NB Pro", "nano_banana_2": "NB 2",
-        "seedream_5_0": "Seedream Lite", "flux_2_pro": "FLUX.2",
-        "qwen_image_edit_inpaint": "Qwen inp.",
-    }
-    model_handles = [
-        plt.Line2D([], [], marker=m, ls="", markersize=5,
-                   markerfacecolor="#c3c2b7", markeredgecolor=MUTED, label=short[k])
-        for k, m in MODEL_MARKER.items() if k in set(d.model)
-    ]
-    leg1 = fig.legend(handles=ctrl_handles, loc="lower left", bbox_to_anchor=(0.1, 0.11),
-                      ncols=3, fontsize=6.5, title="Control", title_fontsize=7,
-                      alignment="left", columnspacing=0.8, handletextpad=0.3)
-    fig.add_artist(leg1)
-    fig.legend(handles=model_handles, loc="lower left", bbox_to_anchor=(0.1, 0.0), ncols=4,
-               fontsize=6.5, title="Model", title_fontsize=7, alignment="left",
-               columnspacing=0.8, handletextpad=0.3)
-    fig.set_size_inches(COL_W, 3.5)
-    fig.tight_layout(rect=(0, 0.2, 1, 1), pad=0.4)
+    fig.legend(handles=ctrl_handles, loc="lower left", bbox_to_anchor=(0.1, 0.0),
+               ncols=3, fontsize=6.5, title="Control", title_fontsize=7,
+               alignment="left", columnspacing=0.8, handletextpad=0.3)
+    fig.set_size_inches(COL_W, 3.1)
+    fig.tight_layout(rect=(0, 0.1, 1, 1), pad=0.4)
     fig.savefig(FIGURES_DIR / "scatter_identity_localization.pdf")
     plt.close(fig)
 
 
-def fig_boxes(df: pd.DataFrame) -> None:
-    """Localization per control rung (left) and identity per model (right)."""
+def _dot_column(ax: Axes, i: int, vals: pd.Series, color: str,
+                rng: np.random.Generator) -> None:
+    """One jittered dot column with a median bar; every output stays visible."""
+    x = i + rng.uniform(-0.16, 0.16, len(vals))
+    ax.scatter(x, vals, s=13, facecolors=color, edgecolors="white",
+               linewidths=0.4, alpha=0.85, zorder=3)
+    ax.plot([i - 0.27, i + 0.27], [vals.median()] * 2, color=INK, lw=1.4, zorder=4)
+
+
+def fig_strips(df: pd.DataFrame) -> None:
+    """Localization per control rung (left) and identity per model (right).
+
+    Jittered dot strips instead of box plots: with fewer than ten faces per
+    cell a five-number summary hides the data, so every output is drawn and
+    only the median is overlaid.
+    """
+    rng = np.random.default_rng(JITTER_SEED)
     fig, axes = plt.subplots(1, 2, figsize=(COL_W * 2 + 0.3, 2.4))
 
     order = [c for c in ["prompt_only", "masked_composite", "masked_inpaint"] if c in set(df.control)]
-    data = [df[df.control == c].change_localization.dropna() for c in order]
-    bp = axes[0].boxplot(data, tick_labels=[CONTROL_NAMES[c] for c in order],
-                         widths=0.5, patch_artist=True,
-                         medianprops={"color": INK, "lw": 1.2},
-                         boxprops={"lw": 0.6}, whiskerprops={"lw": 0.6, "color": MUTED},
-                         capprops={"lw": 0.6, "color": MUTED},
-                         flierprops={"marker": "o", "markersize": 3, "markeredgecolor": MUTED})
-    for patch, c in zip(bp["boxes"], order):
-        patch.set_facecolor(CONTROL_COLOR[c])
-        patch.set_alpha(0.35)
-        patch.set_edgecolor(CONTROL_COLOR[c])
+    for i, c in enumerate(order):
+        _dot_column(axes[0], i, df[df.control == c].change_localization.dropna(),
+                    CONTROL_COLOR[c], rng)
+    axes[0].set_xticks(range(len(order)), [CONTROL_NAMES[c] for c in order])
+    axes[0].set_xlim(-0.6, len(order) - 0.4)
     axes[0].set_ylabel("Edit localization")
     axes[0].set_title("(a) Localization by control", fontsize=8, color=INK)
     for lbl in axes[0].get_xticklabels():
@@ -141,15 +139,12 @@ def fig_boxes(df: pd.DataFrame) -> None:
         lbl.set_ha("right")
 
     models = sorted(set(df.model), key=lambda m: -df[df.model == m].identity_cosine.median())
-    data = [df[df.model == m].identity_cosine.dropna() for m in models]
-    bp = axes[1].boxplot(data, tick_labels=[MODEL_NAMES[m] for m in models],
-                         widths=0.5, patch_artist=True,
-                         medianprops={"color": INK, "lw": 1.2},
-                         boxprops={"lw": 0.6, "facecolor": "#c3c2b7", "alpha": 0.4},
-                         whiskerprops={"lw": 0.6, "color": MUTED},
-                         capprops={"lw": 0.6, "color": MUTED},
-                         flierprops={"marker": "o", "markersize": 3, "markeredgecolor": MUTED})
+    for i, m in enumerate(models):
+        _dot_column(axes[1], i, df[df.model == m].identity_cosine.dropna(),
+                    "#2a78d6", rng)
     axes[1].axhline(0.6, color=MUTED, lw=0.8, ls=(0, (4, 3)))
+    axes[1].set_xticks(range(len(models)), [MODEL_NAMES[m] for m in models])
+    axes[1].set_xlim(-0.6, len(models) - 0.4)
     axes[1].set_ylabel("ArcFace identity cosine")
     axes[1].set_title("(b) Identity by model", fontsize=8, color=INK)
     axes[1].tick_params(axis="x", labelsize=6.5)
@@ -161,7 +156,7 @@ def fig_boxes(df: pd.DataFrame) -> None:
         style_axes(ax)
         ax.grid(False, axis="x")
     fig.tight_layout(pad=0.6)
-    fig.savefig(FIGURES_DIR / "box_localization_identity.pdf")
+    fig.savefig(FIGURES_DIR / "strip_localization_identity.pdf")
     plt.close(fig)
 
 
@@ -196,7 +191,7 @@ def main() -> None:
     FIGURES_DIR.mkdir(parents=True, exist_ok=True)
     df = pd.read_csv(DATA_DIR / "canonical_rows.csv")
     fig_scatter(df)
-    fig_boxes(df)
+    fig_strips(df)
     fig_gt_strip(df)
     print(f"wrote 3 figures to {FIGURES_DIR}")
 
