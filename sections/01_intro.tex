@@ -28,10 +28,12 @@ other facial regions. Such off-target change can both weaken identity retention
 and present cosmetic effects unrelated to the requested procedure. The
 training-free localization literature knows how to confine
 edits~\cite{avrahami2022blended,couairon2023diffedit}. Every such method, however,
-needs the model's latents, attention, or sampling loop, and a hosted API exposes
-none of them.
+needs the model's latents, attention, or sampling loop, and a public editing
+API exposes none of them.
 
-We therefore evaluate how much off-target change can be prevented on the client.
+We therefore evaluate how much off-target change can be prevented on the
+client, i.e., the caller's side of the API, before a request is sent or after
+the response returns.
 The pilot benchmark covers six editing configurations (GPT Image~2 at two quality
 tiers, Nano Banana~Pro and~2, Seedream~5.0 Lite, and FLUX.2~[pro]) plus a Qwen
 inpainting endpoint, two requested edit types, and publicly accessible
@@ -40,9 +42,10 @@ Our contributions are:
 
 \begin{itemize}
   \item \textbf{A model-agnostic control ladder.} Three rungs over the same
-  black-box endpoints: prompt-only, a client-side masked composite
-  (landmark-derived region masks, alignment, feathered blending, pose gating),
-  and native masked inpainting where supported. The composite adapts the final
+  black-box endpoints: prompt-only, a client-side masked composite that cuts
+  the model's edit out along a landmark-derived region mask and pastes it back
+  onto the original photograph (with alignment, feathered blending, and pose
+  gating), and native masked inpainting where supported. The composite adapts the final
   step of blended-diffusion editing to a setting where nothing inside the model
   is reachable (Sec.~\ref{sec:method}).
   \item \textbf{A two-part diagnostic protocol.} ArcFace identity is paired with
@@ -60,11 +63,11 @@ Our contributions are:
 \end{itemize}
 
 To our knowledge, this is the first controlled comparison of client-side region
-confinement across multiple hosted, black-box editing APIs for
+confinement across multiple commercial, black-box editing APIs for
 cosmetic-surgery previews. What differs here is the setting. Bespoke surgical
 simulators and composited rhinoplasty systems
 exist~\cite{knoedler2024rhinoplastygan,agarwal2026envisage}, but they assume a
-model the operator hosts, and hosted editors have been benchmarked in other
+model the operator hosts, and online editors have been benchmarked in other
 domains~\cite{qian2025giebench,gptimgeval2025} without control as the
 manipulated variable. When the editor is a black-box endpoint, no
 internals-based localization method applies, so whatever control exists must

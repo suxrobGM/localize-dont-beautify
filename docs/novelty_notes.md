@@ -2,9 +2,9 @@
 
 ## Defensible contribution
 
-The paper is a pilot comparison of a client-side control ladder across hosted,
-black-box image-editing endpoints for two cosmetic-surgery preview requests. The
-contribution is the controlled hosted-API comparison and implementation audit, not
+The paper is a pilot comparison of a client-side control ladder across
+commercial, black-box image-editing endpoints for two cosmetic-surgery preview
+requests. The contribution is the controlled API comparison and implementation audit, not
 a new compositing algorithm, surgical outcome model, or clinically validated
 metric.
 
@@ -18,8 +18,8 @@ compositing. Our paper must not imply stronger clinical validation than Envisage
 
 The distinction is the setting, not scale. Envisage assumes an open-weight
 inpainter the operator hosts, so neither its pipeline nor any internals-based
-localization method transfers to a hosted black-box endpoint. That endpoint is
-the setting we study, with multiple hosted endpoints, two requested edit types,
+localization method transfers to a remote black-box endpoint. That endpoint is
+the setting we study, with multiple provider endpoints, two requested edit types,
 and prompt-only/client-composite/native-mask control as the manipulated variable.
 The current study is much smaller and has no surgeon ratings.
 

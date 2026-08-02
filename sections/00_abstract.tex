@@ -1,23 +1,29 @@
-Hosted image editors often modify facial regions outside the anatomy named in a
-cosmetic-surgery preview request, and every training-free localization method in
-the literature needs model internals that a hosted endpoint does not expose. We
-conduct a pilot benchmark of the control that remains available on the client:
-six hosted editing configurations and one mask-specific inpainting endpoint on
-facelift-style jaw--neck and rhinoplasty edits, under a three-rung ladder of
-prompt only, a landmark-derived client-side masked composite, and
-endpoint-native masked inpainting where available. Across \NumAttemptedEdits{}
-attempted cells, \NumScoredEdits{} outputs were scoreable. ArcFace cosine
-measures identity retention, while a CIELAB ratio measures change in the target
-region relative to a predefined facial keep zone. Among the
-\NumLocalizationFaces{} frontal faces for which regional scoring was available,
-compositing increased localization over the paired prompt-only output by a
-median of \MedPairedLocGain{} (95\% face-clustered bootstrap interval
-\PairedLocGainLow--\PairedLocGainHigh) while retaining comparable on-target
-pixel change. Model choice produced a visible trade-off between edit strength
-and identity retention, and the single tested inpainting endpoint did not
-outperform post-hoc compositing. The claims are scoped to control rather than
-clinical accuracy: no surgeon ratings were collected, and each cell contains
-one generated output. Within that scope, region
-confinement for surgical previews requires no model access; it can be enforced
-on the client alone, uniformly across the tested editors and at low provider
-cost.
+Ask an online image editor to preview a cosmetic procedure and it will often
+change more of the face than the request names: a nose edit can also smooth
+skin, alter lighting, or shift other features. Existing methods for confining
+an edit to one region all require access to the model's internals, and a
+service reached only through its public API exposes none of them. We therefore
+ask how much control is possible from the client side alone. In a pilot
+benchmark, six configurations of commercial editing models and one mask-based
+inpainting endpoint perform facelift-style jaw--neck edits
+and rhinoplasty edits at three increasing levels of client-side control:
+sending the prompt alone, cutting the edited region out of the response and
+pasting it back onto the original photograph through a landmark-derived mask
+(a masked composite), and asking the endpoint itself to inpaint inside the
+mask where that option exists. Of \NumAttemptedEdits{} attempted edits,
+\NumScoredEdits{} could be scored. ArcFace cosine similarity measures how well
+each output preserves the person's identity, and a CIELAB pixel-change ratio
+measures how much of the change lands inside the requested region rather than
+in a protected facial zone. On the \NumLocalizationFaces{} frontal faces the
+regional metric could score, the masked composite improved this localization
+score over the paired prompt-only output by a median of \MedPairedLocGain{}
+(95\% face-clustered bootstrap interval
+\PairedLocGainLow--\PairedLocGainHigh) while changing the requested region
+about as much. The editors differed visibly in how strongly they edit versus
+how well they preserve identity, and the one inpainting endpoint we tested did
+not beat the simple composite. This is a study of control, not of clinical
+accuracy: no surgeons rated the outputs, and each condition was generated
+once. Within that scope, the practical finding is that keeping a surgical
+preview inside its intended region needs no access to the model; a mask and
+composite on the client enforce it across every editor we tested, at low
+provider cost.

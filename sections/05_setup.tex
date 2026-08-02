@@ -9,14 +9,17 @@
   \resizebox{\columnwidth}{!}{\input{tables/setup_models}}
 \end{table}
 
-\textbf{Models.} Table~\ref{tab:models} lists six hosted editing configurations:
+\textbf{Models.} Table~\ref{tab:models} lists six commercial editing configurations:
 OpenAI GPT Image~2 at two quality tiers~\cite{openai2026gptimage2}, Google's Nano
 Banana~Pro and Nano Banana~2~\cite{google2025nanobananapro,google2026nanobanana2},
 ByteDance Seedream~5.0 Lite~\cite{seedream5lite_2026,seedream4_2025}, and
 FLUX.2~[pro]~\cite{bfl2025flux2,bfl2025fluxkontext}. A Qwen-Image-Edit endpoint
-provides the masked-inpaint rung~\cite{wu2025qwenimage}. Hosted services are moving
-targets, so every run records its date and endpoint alias. The provider did not
-expose immutable revisions for every model.
+provides the masked-inpaint rung~\cite{wu2025qwenimage}. All requests were
+routed through a single API gateway, fal.ai, whose endpoint aliases and
+per-image prices Table~\ref{tab:models} records; the underlying models are
+served by their respective vendors. Online services are moving targets, so
+every run records its date and endpoint alias. The gateway did not expose
+immutable revisions for every model.
 
 \textbf{Data.} The full pool contains real, publicly accessible before/after
 photograph pairs: 12 frontal facelift inputs (11 with a paired postoperative

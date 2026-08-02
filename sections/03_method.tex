@@ -1,7 +1,7 @@
 \section{Method}
 \label{sec:method}
 
-We treat each editing model as a black box behind a hosted endpoint: it accepts an
+We treat each editing model as a black box behind a remote API: it accepts an
 image and a text instruction and returns an edited image. No weights, latents,
 attention maps, or sampling loop are exposed, so the training-free localization
 methods surveyed in Sec.~\ref{sec:related} do not apply. Everything we add runs on
@@ -56,7 +56,7 @@ defined only by the frontal mesh and are pose-gated instead (below).
 \subsection{Masked compositing and pose gating}
 \label{sec:composite}
 
-Hosted editors routinely shift, rescale, or re-crop the head, so pasting the raw
+Online editors routinely shift, rescale, or re-crop the head, so pasting the raw
 response through a mask produces double contours. We first align the edited image
 onto the input with a similarity warp estimated from stable landmark anchors, then
 blend: $\mathrm{out} = x\,(1-w) + e\,w$, where $x$ is the input, $e$ the aligned
