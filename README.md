@@ -8,8 +8,8 @@ This pilot tests whether a landmark-derived, client-side composite can prevent
 hosted image editors from changing pixels outside a requested facial region. It
 can: the composite enforces preservation by construction, and target-region pixel
 change is largely retained. The study does not establish clinical plausibility or
-predict surgical outcomes; it contains 15 main-analysis faces, one output per cell,
-and no surgeon ratings.
+predict surgical outcomes; it contains <!--NumPrimaryFaces-->15 main-analysis
+faces, one output per cell, and no surgeon ratings.
 
 ## Repository scope
 

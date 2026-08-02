@@ -16,6 +16,7 @@ pdf:
 
 check:
 	$(PY) scripts/check_citations.py
+	$(PY) scripts/check_readme.py
 
 clean:
 	latexmk -C main.tex

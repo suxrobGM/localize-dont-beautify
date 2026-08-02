@@ -58,3 +58,19 @@ paper actually cites and renders, and lists any dead entries or missing keys.
 Run it with `make check` (part of `make all`, after the PDF exists) or after
 touching refs.bib or any `\cite`; all three counts should match, and the
 script exits nonzero if they don't.
+
+## check_readme.py
+
+The paper prose can't drift because it cites macros, but the README quotes a
+couple of headline numbers as plain text, and Markdown has no macros. So each
+one carries the name of the macro it mirrors in an HTML comment, which GitHub
+renders as nothing:
+
+```markdown
+it contains <!--NumPrimaryFaces-->15 main-analysis faces
+```
+
+The script compares every tagged value against `tables/numbers.tex` and exits
+nonzero on a mismatch or on a macro that doesn't exist. It also runs under
+`make check`. If you quote a new number in the README, tag it the same way;
+anything untagged is invisible to the check.
