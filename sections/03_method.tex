@@ -56,7 +56,7 @@ defined only by the frontal mesh and are pose-gated instead (below).
 \subsection{Masked compositing and pose gating}
 \label{sec:composite}
 
-Online editors routinely shift, rescale, or re-crop the head, so pasting the raw
+Editing APIs routinely shift, rescale, or re-crop the head, so pasting the raw
 response through a mask produces double contours. We first align the edited image
 onto the input with a similarity warp estimated from stable landmark anchors, then
 blend: $\mathrm{out} = x\,(1-w) + e\,w$, where $x$ is the input, $e$ the aligned

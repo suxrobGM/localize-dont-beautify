@@ -17,10 +17,11 @@ matches the eventual outcome predicts how satisfied the patient will
 be~\cite{yamamichi2025crisalix}. The same literature warns that an over-idealized
 preview sets expectations no operation can meet~\cite{agarwal2007morph}. Producing
 these previews today requires either manual morphing skill or dedicated 3D
-systems; meanwhile, general-purpose image-editing models served over public APIs
-can perform instruction-guided photo edits. This motivates testing whether those
-services can support controlled cosmetic-surgery visualization without access to
-their weights or inference process.
+systems; meanwhile, general-purpose image-editing APIs, i.e., commercial editing
+models reachable only through a public endpoint, can perform instruction-guided
+photo edits. This motivates testing whether those services can support controlled
+cosmetic-surgery visualization without access to their weights or inference
+process.
 
 In preliminary tests, a request for a specific visible change, such as jawline
 and neck repositioning or dorsal-hump reduction, also altered skin, lighting, and
@@ -67,7 +68,7 @@ confinement across multiple commercial, black-box editing APIs for
 cosmetic-surgery previews. What differs here is the setting. Bespoke surgical
 simulators and composited rhinoplasty systems
 exist~\cite{knoedler2024rhinoplastygan,agarwal2026envisage}, but they assume a
-model the operator hosts, and online editors have been benchmarked in other
+model the operator hosts, and image-editing APIs have been benchmarked in other
 domains~\cite{qian2025giebench,gptimgeval2025} without control as the
 manipulated variable. When the editor is a black-box endpoint, no
 internals-based localization method applies, so whatever control exists must

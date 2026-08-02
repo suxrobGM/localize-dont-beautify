@@ -1,11 +1,11 @@
 # Localize, Don't Beautify
 
 LaTeX source and analysis artifacts for *"Localize, Don't Beautify: Client-Side
-Control of Online Image Editors for Cosmetic Surgery Previews"* (IEEE
+Control of Image-Editing APIs for Cosmetic Surgery Previews"* (IEEE
 conference format).
 
 This pilot tests whether a landmark-derived, client-side composite can prevent
-online image editors from changing pixels outside a requested facial region. It
+image-editing APIs from changing pixels outside a requested facial region. It
 can: the composite enforces preservation by construction, and target-region pixel
 change is largely retained. The study does not establish clinical plausibility or
 predict surgical outcomes; it contains <!--NumPrimaryFaces-->15 main-analysis
