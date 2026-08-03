@@ -19,9 +19,11 @@ regional metric could score, the masked composite improved this localization
 score over the paired prompt-only output by a median of \MedPairedLocGain{}
 (95\% face-clustered bootstrap interval
 \PairedLocGainLow--\PairedLocGainHigh) while changing the requested region
-about as much. The editors differed visibly in how strongly they edit versus
-how well they preserve identity, and the one inpainting endpoint we tested did
-not beat the simple composite. This is a study of control, not of clinical
+about as much. The editors differed visibly in how strongly they edited versus
+how well they preserved identity, and the one inpainting endpoint we tested did
+not beat the simple composite. Against each face's input-to-postoperative
+baseline, no editor moved its outputs closer to the postoperative photograph in
+identity-embedding terms. This is a study of control, not of clinical
 accuracy: no surgeons rated the outputs, and each condition was generated
 once. Within that scope, the practical finding is that keeping a surgical
 preview inside its intended region needs no access to the model; a mask and

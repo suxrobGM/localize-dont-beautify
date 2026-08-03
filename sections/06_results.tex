@@ -107,18 +107,27 @@ endpoint-native masking.
 
 Edit-to-postoperative ArcFace cosine has median \MedGtCosine{} (range
 \GtCosineMin--\GtCosineMax; facelift \MedGtCosineFacelift{}, rhinoplasty
-\MedGtCosineRhino), shown in Fig.~\ref{fig:gt}. These values are not compared
-with input-to-postoperative cosines, so they cannot show that an edit moved toward
-the observed surgical outcome. Fig.~\ref{fig:profiles} visualizes two available
-profile references; these edits remain uncomposited and the regional metric
-abstains.
+\MedGtCosineRhino), shown in Fig.~\ref{fig:gt} against the
+\NumGtBaselineFaces{} per-face input baselines (median \MedGtBaseline{}, range
+\GtBaselineMin--\GtBaselineMax). Editing costs a little of this similarity
+rather than adding to it: the median within-face change across
+\NumGtDeltaOutputs{} outputs is $\MedGtDelta$ (95\% face-clustered bootstrap
+interval $\GtDeltaLow$ to $\GtDeltaHigh$), only \PctGtDeltaPositive\% of outputs
+score above their face's baseline, and every editor's median change is
+negative, FLUX.2~[pro]'s most strongly, consistent with its position on the
+edit-strength spectrum (Sec.~\ref{sec:identity}). In embedding space, then, no
+editor moved outputs systematically closer to the observed outcome.
+Fig.~\ref{fig:profiles} visualizes two available profile references; these
+edits remain uncomposited and the regional metric abstains.
 
 \begin{figure}[t]
   \centering
   \includegraphics[width=\columnwidth]{strip_gt_cosine}
   \caption{ArcFace cosine between each edit and the face's postoperative
-  photograph (bars: medians). This is an identity reference, not an
-  outcome-accuracy score; no input-to-postoperative baseline was recorded.}
+  photograph (bars: medians; open diamonds: the input photo's own cosine with
+  the postoperative photograph, one per face). Most edits fall below their
+  face's baseline. This is an identity reference, not an outcome-accuracy
+  score.}
   \label{fig:gt}
 \end{figure}
 

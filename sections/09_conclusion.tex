@@ -13,10 +13,11 @@ The study does not validate cosmetic-surgery outcome prediction, and
 client-side compositing should be read as a control for off-target pixel
 changes, not as evidence that a preview is clinically accurate or safe for
 patient counseling. The main analysis contains \NumPrimaryFaces{} faces, one
-generated output per cell, no surgeon ratings, limited profile support, and no
-metric of improvement over the original image relative to postoperative
-anatomy. The next study should add repeated generations, pose-robust
-whole-image localization, and input-relative postoperative metrics. It will
+generated output per cell, no surgeon ratings, limited profile support, and
+only an identity-embedding measure of movement toward the postoperative
+photographs; by that measure the edits moved slightly away from the outcome,
+not closer. The next study should add repeated generations, pose-robust
+whole-image localization, and anatomy-aware postoperative accuracy metrics. It will
 also need multiple blinded surgeons with inter-rater agreement, a larger and
 demographically characterized cohort, and immutable or self-hosted model
 baselines. What the pilot does establish is

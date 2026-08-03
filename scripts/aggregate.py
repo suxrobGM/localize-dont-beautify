@@ -14,7 +14,6 @@ import sys
 
 import pandas as pd
 import yaml
-
 from config import (
     CANONICAL_RUN_PREFIXES,
     CONTROL_NAMES,
@@ -176,6 +175,19 @@ def write_numbers(
     nb = df[df.model.isin(["nano_banana_pro", "nano_banana_2"])]
     gt = df.gt_identity_cosine.dropna()
 
+    # Input-to-postoperative baseline (scripts/gt_baseline.py; no generated images
+    # involved). Deltas compare each edit's postop cosine against its face's baseline.
+    baseline_csv = DATA_DIR / "gt_baseline.csv"
+    if not baseline_csv.exists():
+        sys.exit("data/gt_baseline.csv missing - run `make baseline` first")
+    base = pd.read_csv(baseline_csv)
+    gt_delta = single[single.gt_identity_cosine.notna()].merge(
+        base, on=["procedure", "face_id"], validate="many_to_one"
+    )
+    gt_delta["delta"] = gt_delta.gt_identity_cosine - gt_delta.gt_baseline_cosine
+    gt_delta["face_cluster"] = gt_delta.procedure + "/" + gt_delta.face_id
+    gt_delta_ci = clustered_median_ci(gt_delta, "delta", "face_cluster")
+
     paired = prom.merge(
         comp,
         on=["procedure", "face_id", "model"],
@@ -263,6 +275,15 @@ def write_numbers(
         ("MedGtCosine", fmt(gt.median())),
         ("GtCosineMin", fmt(gt.min())),
         ("GtCosineMax", fmt(gt.max())),
+        ("NumGtBaselineFaces", len(base)),
+        ("MedGtBaseline", fmt(base.gt_baseline_cosine.median())),
+        ("GtBaselineMin", fmt(base.gt_baseline_cosine.min())),
+        ("GtBaselineMax", fmt(base.gt_baseline_cosine.max())),
+        ("NumGtDeltaOutputs", len(gt_delta)),
+        ("MedGtDelta", fmt(gt_delta.delta.median())),
+        ("GtDeltaLow", fmt(gt_delta_ci[0])),
+        ("GtDeltaHigh", fmt(gt_delta_ci[1])),
+        ("PctGtDeltaPositive", f"{(gt_delta.delta > 0).mean() * 100:.0f}"),
         ("MedGtCosineFacelift", fmt(df[df.procedure == "deep_plane_facelift"].gt_identity_cosine.dropna().median())),
         ("MedGtCosineRhino", fmt(df[df.procedure == "rhinoplasty"].gt_identity_cosine.dropna().median())),
         ("MedLatency", fmt(df.latency_s.median(), 0)),

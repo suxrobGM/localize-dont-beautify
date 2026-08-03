@@ -1,0 +1,16 @@
+procedure,face_id,gt_baseline_cosine
+deep_plane_facelift,real_01,0.7308651208877563
+deep_plane_facelift,real_02,0.7276780605316162
+deep_plane_facelift,real_03,0.676440417766571
+deep_plane_facelift,real_04,0.8291781544685364
+deep_plane_facelift,real_05,0.8034961819648743
+deep_plane_facelift,real_06,0.7672186493873596
+deep_plane_facelift,real_07,0.8110665678977966
+deep_plane_facelift,real_08,0.6122503280639648
+rhinoplasty,real_02,0.5716176629066467
+rhinoplasty,real_03,0.4739055633544922
+rhinoplasty,real_04,0.7537028789520264
+rhinoplasty,real_06_front,0.7437680959701538
+rhinoplasty,real_07_front,0.7492422461509705
+rhinoplasty,real_08_front,0.7618182897567749
+rhinoplasty,real_09_front,0.7703142762184143

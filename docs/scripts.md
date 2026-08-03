@@ -35,6 +35,21 @@ row with the most populated metrics wins, latest run breaks ties). Writes:
 That last file is the reason the paper text contains no hand-typed metrics: the
 prose cites macros like `\MedLocComposite`, and rebuilding regenerates them.
 
+## gt_baseline.py
+
+Computes the input-to-postoperative ArcFace cosine for every face that has a
+post-op photo, writing `data/gt_baseline.csv`. Self-contained: it uses
+insightface directly via this repo's `baseline` extra (`make baseline` =
+`uv run --extra baseline ...`), configured to match the experiment pipeline's
+settings (buffalo_l on CPU, det_size 640, det_thresh 0.15, largest detected
+face) so the baselines are comparable with the run cosines - verified
+byte-identical against that pipeline. The experiment repo is only read for
+photographs and the manifest. No API calls, no generated images. The CSV is
+committed, so `make numbers` doesn't need the heavy extra; `aggregate.py`
+merges the baselines into the delta macros (`\MedGtDelta` and friends) and
+refuses to run if the CSV is missing. Re-run it only when the face set or
+ground-truth photos change.
+
 ## make_figures.py
 
 The three quantitative figures (identity-vs-localization scatter, jittered

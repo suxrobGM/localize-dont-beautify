@@ -48,11 +48,14 @@ editor's quality.
 \subsection{Postoperative identity reference}
 
 For faces with a postoperative photograph, we report the ArcFace cosine between
-the edit and that photograph. This is an identity-continuity reference only. The
-sessions differ in pose, expression, makeup, and hair, and the present run records
-do not include the input-to-postoperative baseline needed to test whether an edit
-moved closer to the observed outcome. We make no outcome-accuracy claim from this
-score.
+the edit and that photograph, and beside it a per-face baseline: the cosine
+between the unedited input and the same postoperative photograph, computed with
+the same embedding pipeline. The baseline is what an edit has to beat before any
+claim of moving closer to the observed outcome can be made in embedding space.
+Both scores are identity-continuity references only. The before and after
+sessions differ in pose, expression, makeup, and hair, and movement in an
+identity embedding is not evidence of anatomical accuracy, so we make no
+outcome-accuracy claim from these scores.
 
 \subsection{Descriptive uncertainty}
 
@@ -63,13 +66,3 @@ differences within face, procedure, and model, then resample faces (10{,}000
 replicates, fixed analysis seed) to obtain a percentile interval for the median.
 This interval describes the observed face set; it does not repair the small sample
 or support population-level clinical inference.
-
-\subsection{Expert rubric (future protocol)}
-
-We release a proposed seven-axis rubric: identity preservation, photorealism,
-procedure specificity, clinical plausibility, edit localization, consistency,
-and safety of the expectation set. Each axis is scored 1--5, with clinical
-plausibility reserved for a surgeon. Suggested pass thresholds have not been
-clinically calibrated. No rubric scores were collected here; a blinded,
-multi-surgeon study with inter-rater agreement is required before clinical claims
-(Sec.~\ref{sec:conclusion}).

@@ -13,8 +13,10 @@ clinical plausibility, realism, or expected postoperative appearance. Its keep
 zone covers only part of the face, and it abstains on profile views, precisely
 where rhinoplasty visualization is important; compositing guarantees off-mask
 preservation, so that result verifies system behavior rather than model quality.
-ArcFace's 0.6 line is heuristic. The postoperative cosines lack an input
-baseline, and neither score is a validated surgical-outcome metric.
+ArcFace's 0.6 line is heuristic. The postoperative comparison, though baselined
+against each face's input photograph, lives entirely in identity-embedding
+space; an edit could approximate the surgical result anatomically while losing
+embedding similarity, and neither score is a validated surgical-outcome metric.
 
 No surgeon ratings were collected. Clinical plausibility therefore rests neither
 on expert judgment nor on a clinically validated automated score. The demographic

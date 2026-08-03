@@ -160,11 +160,15 @@ def fig_strips(df: pd.DataFrame) -> None:
     plt.close(fig)
 
 
-def fig_gt_strip(df: pd.DataFrame) -> None:
-    """Ground-truth cosine strip plot: a soft sanity check, deliberately small."""
+def fig_gt_strip(df: pd.DataFrame, base: pd.DataFrame) -> None:
+    """Ground-truth cosine strip plot: a soft sanity check, deliberately small.
+
+    Open diamonds are the input-to-postoperative baselines (one per face,
+    scripts/gt_baseline.py), drawn just below each row so the edited outputs can
+    be read against the similarity the unedited photo already had."""
     d = df.dropna(subset=["gt_identity_cosine"])
     procs = sorted(set(d.procedure))
-    fig, ax = plt.subplots(figsize=(COL_W, 1.8))
+    fig, ax = plt.subplots(figsize=(COL_W, 2.0))
     for i, proc in enumerate(procs):
         g = d[d.procedure == proc]
         jitter = (pd.Series(range(len(g))) % 5 - 2) * 0.045
@@ -172,17 +176,30 @@ def fig_gt_strip(df: pd.DataFrame) -> None:
                    facecolors="#2a78d6", edgecolors="white", linewidths=0.4, alpha=0.85, zorder=3)
         ax.plot([g.gt_identity_cosine.median()] * 2, [i - 0.28, i + 0.28],
                 color=INK, lw=1.4, zorder=4)
+        b = base[base.procedure == proc].gt_baseline_cosine.dropna()
+        ax.scatter(b, [i - 0.38] * len(b), s=16, marker="D", facecolors="none",
+                   edgecolors=INK, linewidths=0.7, zorder=3)
+    handles = [
+        plt.Line2D([], [], marker="o", ls="", markersize=4.5,
+                   markerfacecolor="#2a78d6", markeredgecolor="white",
+                   label="edited output vs. post-op"),
+        plt.Line2D([], [], marker="D", ls="", markersize=4.5,
+                   markerfacecolor="none", markeredgecolor=INK,
+                   label="input photo vs. post-op (baseline)"),
+    ]
+    fig.legend(handles=handles, loc="upper left", bbox_to_anchor=(0.12, 1.0),
+               ncols=1, fontsize=6.5, handletextpad=0.3, labelspacing=0.2)
     ax.set_yticks(range(len(procs)))
     proc_labels = {
         "deep_plane_facelift": "Facelift-style",
         "rhinoplasty": "Rhinoplasty",
     }
     ax.set_yticklabels([proc_labels.get(p, p.replace("_", " ").capitalize()) for p in procs])
-    ax.set_xlabel("ArcFace cosine, edited vs. post-op photo")
+    ax.set_xlabel("ArcFace cosine vs. post-op photo")
     ax.set_ylim(-0.6, len(procs) - 0.4)
     style_axes(ax)
     ax.grid(False, axis="y")
-    fig.tight_layout(pad=0.4)
+    fig.tight_layout(rect=(0, 0, 1, 0.86), pad=0.4)
     fig.savefig(FIGURES_DIR / "strip_gt_cosine.pdf")
     plt.close(fig)
 
@@ -190,9 +207,10 @@ def fig_gt_strip(df: pd.DataFrame) -> None:
 def main() -> None:
     FIGURES_DIR.mkdir(parents=True, exist_ok=True)
     df = pd.read_csv(DATA_DIR / "canonical_rows.csv")
+    base = pd.read_csv(DATA_DIR / "gt_baseline.csv")
     fig_scatter(df)
     fig_strips(df)
-    fig_gt_strip(df)
+    fig_gt_strip(df, base)
     print(f"wrote 3 figures to {FIGURES_DIR}")
 
 

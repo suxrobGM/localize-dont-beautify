@@ -19,14 +19,15 @@ preview sets expectations no operation can meet~\cite{agarwal2007morph}. Produci
 these previews today requires either manual morphing skill or dedicated 3D
 systems; meanwhile, general-purpose image-editing APIs, i.e., commercial editing
 models reachable only through a public endpoint, can perform instruction-guided
-photo edits. This motivates testing whether those services can support controlled
-cosmetic-surgery visualization without access to their weights or inference
-process.
+photo edits. The natural question is whether such a service can produce a
+controlled cosmetic-surgery preview when neither its weights nor its inference
+process is accessible.
 
 In preliminary tests, a request for a specific visible change, such as jawline
 and neck repositioning or dorsal-hump reduction, also altered skin, lighting, and
-other facial regions. Such off-target change can both weaken identity retention
-and present cosmetic effects unrelated to the requested procedure. The
+other facial regions. Off-target change of this kind can make the output less
+recognizable as the same person, and it shows the patient cosmetic effects
+unrelated to the requested procedure. The
 training-free localization literature knows how to confine
 edits~\cite{avrahami2022blended,couairon2023diffedit}. Every such method, however,
 needs the model's latents, attention, or sampling loop, and a public editing
@@ -52,11 +53,10 @@ Our contributions are:
   \item \textbf{A two-part diagnostic protocol.} ArcFace identity is paired with
   a CIELAB region-localization ratio and its target/off-target components. The
   metrics detect identity loss, off-target pixel change, and near-copies, but do
-  not measure clinical plausibility. Postoperative photographs provide a separate
-  identity reference, and a surgeon rubric is released for future validation
-  (Sec.~\ref{sec:protocol}).
+  not measure clinical plausibility. Postoperative photographs provide an
+  identity reference with a per-face input baseline (Sec.~\ref{sec:protocol}).
   \item \textbf{A pilot benchmark.} Client-side compositing enforces off-mask
-  preservation across the tested editors without materially eliminating on-target
+  preservation across the tested editors without materially reducing on-target
   pixel change. The editors differ in edit strength and identity retention, while
   the one tested mask-specific endpoint does not outperform compositing. A
   two-order, single-face chain is reported only as a feasibility probe
