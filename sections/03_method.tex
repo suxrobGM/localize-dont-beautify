@@ -14,18 +14,18 @@ A procedure specification consists of a target region $r$ (jaw and neck for the
 facelift-style request, nose for rhinoplasty), a positive instruction describing
 the visible anatomical change, and a list of changes to avoid. We compare three
 rungs of increasing client-side control, holding faces, model settings, and
-prompts fixed. A common seed is supplied to every endpoint; the GPT Image~2 and
+prompts fixed. A common seed is supplied to every model; the GPT Image~2 and
 Seedream~5.0 Lite schemas have no seed field and ignore it:
 
 \begin{itemize}
   \item \textbf{Prompt only.} The photo and instruction go to the endpoint
   unmodified and the response is used as-is. This measures what the model does when
   instructed to edit one region.
-  \item \textbf{Masked composite.} The endpoint still edits the whole image, but we
+  \item \textbf{Masked composite.} The model still edits the whole image, but we
   discard everything outside $r$: the response is aligned back onto the input and
   composited through a feathered region mask (Sec.~\ref{sec:composite}), so pixels
   outside the mask remain identical to the input by construction.
-  \item \textbf{Masked inpaint.} For endpoints that accept an explicit mask, we send
+  \item \textbf{Masked inpaint.} For models that accept an explicit mask, we send
   the region mask with the request and let the model inpaint inside it.
 \end{itemize}
 

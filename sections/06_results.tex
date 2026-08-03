@@ -88,20 +88,20 @@ ordering is interpreted as clinical quality.
   \label{fig:strips}
 \end{figure*}
 
-\subsection{The tested inpainting endpoint}
+\subsection{The tested inpainting model}
 \label{sec:inpaint}
 
 Only Qwen-Image-Edit was tested on the masked-inpaint rung; this comparison does
-not characterize masked inpainting generally. On rhinoplasty, the endpoint has
+not characterize masked inpainting generally. On rhinoplasty, the model has
 identity \InpaintRhinoIdentity{}, target change \InpaintRhinoTgt{}, off-target
 change \InpaintRhinoOff{}, and localization \InpaintRhinoLoc{}. The small target
 change indicates a near-copy while the full image changes slightly. On the
 facelift-style request, it changes the target more
 (\InpaintFaceliftTgt{}) but has identity \InpaintFaceliftIdentity{} and
 localization \InpaintFaceliftLoc{}. One of eight requests was rejected by the
-provider's content checker. For this endpoint and these single outputs,
+provider's content checker. For this model and these single outputs,
 client-side compositing produced stronger measured keep-zone preservation than
-endpoint-native masking.
+provider-side masking.
 
 \subsection{Postoperative identity reference}
 

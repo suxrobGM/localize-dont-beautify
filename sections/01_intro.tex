@@ -38,13 +38,13 @@ client, i.e., the caller's side of the API, before a request is sent or after
 the response returns.
 The pilot benchmark covers six editing configurations (GPT Image~2 at two quality
 tiers, Nano Banana~Pro and~2, Seedream~5.0 Lite, and FLUX.2~[pro]) plus a Qwen
-inpainting endpoint, two requested edit types, and publicly accessible
+inpainting model, two requested edit types, and publicly accessible
 before/after photograph pairs; each matrix cell contains one generated output.
 Our contributions are:
 
 \begin{itemize}
   \item \textbf{A model-agnostic control ladder.} Three rungs over the same
-  black-box endpoints: prompt-only, a client-side masked composite that cuts
+  black-box APIs: prompt-only, a client-side masked composite that cuts
   the model's edit out along a landmark-derived region mask and pastes it back
   onto the original photograph (with alignment, feathered blending, and pose
   gating), and native masked inpainting where supported. The composite adapts the final
@@ -58,7 +58,7 @@ Our contributions are:
   \item \textbf{A pilot benchmark.} Client-side compositing enforces off-mask
   preservation across the tested editors without materially reducing on-target
   pixel change. The editors differ in edit strength and identity retention, while
-  the one tested mask-specific endpoint does not outperform compositing. A
+  the one tested mask-specific model does not outperform compositing. A
   two-order, single-face chain is reported only as a feasibility probe
   (Sec.~\ref{sec:results}).
 \end{itemize}
@@ -70,7 +70,7 @@ simulators and composited rhinoplasty systems
 exist~\cite{knoedler2024rhinoplastygan,agarwal2026envisage}, but they assume a
 model the operator hosts, and image-editing APIs have been benchmarked in other
 domains~\cite{qian2025giebench,gptimgeval2025} without control as the
-manipulated variable. When the editor is a black-box endpoint, no
+manipulated variable. When the editor is a black-box API, no
 internals-based localization method applies, so whatever control exists must
 live on the client. Measuring how much that recovers is our contribution; we
 propose no new compositing algorithm, clinical outcome model, or clinical

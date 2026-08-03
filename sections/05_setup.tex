@@ -3,7 +3,7 @@
 
 \begin{table}[t]
   \centering
-  \caption{Endpoints in the study. All run behind fal.ai; cost is the provider's
+  \caption{Models in the study. All run behind fal.ai; cost is the provider's
   estimate on July 16, 2026. Aliases may change after that date.}
   \label{tab:models}
   \resizebox{\columnwidth}{!}{\input{tables/setup_models}}
@@ -13,7 +13,7 @@
 OpenAI GPT Image~2 at two quality tiers~\cite{openai2026gptimage2}, Google's Nano
 Banana~Pro and Nano Banana~2~\cite{google2025nanobananapro,google2026nanobanana2},
 ByteDance Seedream~5.0 Lite~\cite{seedream5lite_2026,seedream4_2025}, and
-FLUX.2~[pro]~\cite{bfl2025flux2,bfl2025fluxkontext}. A Qwen-Image-Edit endpoint
+FLUX.2~[pro]~\cite{bfl2025flux2,bfl2025fluxkontext}. A Qwen-Image-Edit model
 provides the masked-inpaint rung~\cite{wu2025qwenimage}. All requests were
 routed through a single API gateway, fal.ai, whose endpoint aliases and
 per-image prices Table~\ref{tab:models} records; the underlying models are
@@ -39,7 +39,7 @@ were used (Sec.~\ref{sec:ethics}).
 
 \textbf{Protocol.} Runs expand a Cartesian matrix of faces $\times$ models
 $\times$ requested edit types $\times$ controls. One output is generated per
-cell, so the study does not estimate within-endpoint stochastic variation. The gallery renderer shows attempted cells,
+cell, so the study does not estimate within-model stochastic variation. The gallery renderer shows attempted cells,
 and provider or scoring failures remain in the run records. Each immutable run
 directory stores its resolved configuration and git commit; output filenames
 encode the full cell key used for scoring. Generation and scoring are decoupled,
