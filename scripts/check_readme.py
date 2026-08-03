@@ -12,41 +12,36 @@ The comment renders as nothing on GitHub. Run it with `make check`, or after
 """
 
 import re
-import sys
-from pathlib import Path
+
+from config import PAPER_ROOT, read_text, report_issues
 
 MARKER = re.compile(r"<!--\s*(\w+)\s*-->\s*([0-9][0-9,.]*)")
 NEWCOMMAND = re.compile(r"\\newcommand\{\\(\w+)\}\{([^}]*)\}")
 
 
-def main() -> None:
-    root = Path(__file__).resolve().parent.parent
-    numbers = dict(NEWCOMMAND.findall((root / "tables" / "numbers.tex").read_text(encoding="utf-8")))
-    readme = (root / "README.md").read_text(encoding="utf-8")
+def digits(value: str) -> str:
+    """Compare on the bare number: TeX writes thousands as 1{,}000, Markdown as 1,000."""
+    return value.replace("{,}", "").replace(",", "")
 
-    tagged = MARKER.findall(readme)
+
+def main() -> None:
+    numbers = dict(NEWCOMMAND.findall(read_text(PAPER_ROOT / "tables" / "numbers.tex")))
+    tagged = MARKER.findall(read_text(PAPER_ROOT / "README.md"))
     print(f"tagged numbers in README.md: {len(tagged)}")
 
-    unknown: list[str] = []
-    stale: list[tuple[str, str, str]] = []
-    for macro, quoted in tagged:
-        if macro not in numbers:
-            unknown.append(macro)
-        elif quoted.replace(",", "") != numbers[macro].replace("{,}", "").replace(",", ""):
-            stale.append((macro, quoted, numbers[macro]))
-
-    if unknown:
-        print("\nTagged with a macro that numbers.tex does not define:")
-        for macro in unknown:
-            print("  -", macro)
-    if stale:
-        print("\nStale (README value vs. generated value):")
-        for macro, quoted, actual in stale:
-            print(f"  - {macro}: README says {quoted}, numbers.tex says {actual}")
-    if unknown or stale:
-        sys.exit(1)
-
-    print("All good: every tagged README number matches numbers.tex.")
+    report_issues(
+        {
+            "Tagged with a macro that numbers.tex does not define": [
+                macro for macro, _ in tagged if macro not in numbers
+            ],
+            "Stale (README value vs. generated value)": [
+                f"{macro}: README says {quoted}, numbers.tex says {numbers[macro]}"
+                for macro, quoted in tagged
+                if macro in numbers and digits(quoted) != digits(numbers[macro])
+            ],
+        },
+        "All good: every tagged README number matches numbers.tex.",
+    )
 
 
 if __name__ == "__main__":

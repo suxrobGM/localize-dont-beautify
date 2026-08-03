@@ -24,10 +24,8 @@ from pathlib import Path
 
 import numpy as np
 import pandas as pd
+from config import DATA_DIR, POC_ROOT
 from PIL import Image
-
-sys.path.insert(0, str(Path(__file__).resolve().parent))
-from config import DATA_DIR, POC_ROOT  # noqa: E402
 
 # Mirrors the experiment pipeline's detection setup: SCRFD confidence scores are
 # deflated in that stack (real faces score ~0.2, not ~0.8), so the stock 0.5
@@ -35,7 +33,7 @@ from config import DATA_DIR, POC_ROOT  # noqa: E402
 DET_THRESH = 0.15
 
 
-def get_face_analysis():
+def face_analysis():
     try:
         from insightface.app import FaceAnalysis
     except ImportError:
@@ -69,10 +67,9 @@ def manifest_gt_paths() -> dict[str, str]:
     if not manifest.exists():
         return {}
     with manifest.open(newline="", encoding="utf-8") as fh:
-        rows = csv.DictReader(fh)
         return {
             r["face_id"]: rel
-            for r in rows
+            for r in csv.DictReader(fh)
             if (rel := (r.get("ground_truth_path") or "").strip())
         }
 
@@ -80,10 +77,7 @@ def manifest_gt_paths() -> dict[str, str]:
 def ground_truth_path(proc: str, face: str, manifest: dict[str, str]) -> Path | None:
     """The real after-photo path: manifest entry first, then the on-disk convention."""
     rel = manifest.get(f"{proc}/{face}")
-    if rel:
-        path = POC_ROOT / "data" / rel
-    else:
-        path = POC_ROOT / "data" / "ground_truth" / proc / f"{face}.png"
+    path = POC_ROOT / "data" / (rel or f"ground_truth/{proc}/{face}.png")
     return path if path.exists() else None
 
 
@@ -95,7 +89,7 @@ def main() -> None:
         .sort_values(["procedure", "face_id"])
     )
     manifest = manifest_gt_paths()
-    app = get_face_analysis()
+    app = face_analysis()
 
     records = []
     for proc, face in faces.itertuples(index=False):

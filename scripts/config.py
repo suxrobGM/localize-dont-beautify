@@ -5,6 +5,7 @@ lands inside this paper repo.
 """
 
 import os
+import sys
 from pathlib import Path
 
 POC_ROOT = Path(os.environ.get("PLASTYVUE_POC", r"c:\Users\admin\source\repos\plastyvue-poc"))
@@ -18,7 +19,7 @@ DATA_DIR = PAPER_ROOT / "data"
 
 # Runs whose rows are eligible for the paper: the registered full-matrix runs
 # (2026-07-16) plus the chained-procedures probe
-CANONICAL_RUN_PREFIXES: list[str] | None = ["20260716-", "20260709-035453"]
+CANONICAL_RUN_PREFIXES = ("20260716-", "20260709-035453")
 
 # Metric columns carried into the canonical row set.
 METRIC_COLS = [
@@ -57,3 +58,26 @@ CONTROL_NAMES = {
 
 def tex_escape(s: str) -> str:
     return s.replace("_", r"\_").replace("&", r"\&").replace("%", r"\%")
+
+
+def read_text(path: Path) -> str:
+    return path.read_text(encoding="utf-8")
+
+
+def write_text(path: Path, text: str) -> None:
+    path.write_text(text, encoding="utf-8")
+
+
+def report_issues(sections: dict[str, list[str]], all_good: str) -> None:
+    """Print every non-empty issue list, then exit nonzero if there were any.
+
+    Shared by the check_* scripts so they fail the build the same way.
+    """
+    issues = {heading: items for heading, items in sections.items() if items}
+    for heading, items in issues.items():
+        print(f"\n{heading}:")
+        for item in items:
+            print("  -", item)
+    if issues:
+        sys.exit(1)
+    print(f"\n{all_good}")
