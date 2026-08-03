@@ -1,31 +1,26 @@
 Ask a commercial image editor to preview a cosmetic procedure and it will often
-change more of the face than the request names: a nose edit can also smooth
-skin, alter lighting, or shift other features. Existing methods for confining
-an edit to one region all require access to the model's internals, and a
-service reached only through its public API exposes none of them. We therefore
+change more of the face than the request names: a nose edit can also smooth skin
+or alter lighting. Existing methods for confining an edit to one region require
+access to the model's internals, which a public editing API does not expose. We
 ask how much control is possible from the client side alone. In a pilot
-benchmark, six configurations of commercial editing models and one mask-based
-inpainting model perform facelift-style jaw--neck edits
-and rhinoplasty edits at three increasing levels of client-side control:
-sending the prompt alone, cutting the edited region out of the response and
-pasting it back onto the original photograph through a landmark-derived mask
-(a masked composite), and asking the model itself to inpaint inside the
-mask where that option exists. Of \NumAttemptedEdits{} attempted edits,
-\NumScoredEdits{} could be scored. ArcFace cosine similarity measures how well
-each output preserves the person's identity, and a CIELAB pixel-change ratio
-measures how much of the change lands inside the requested region rather than
-in a protected facial zone. On the \NumLocalizationFaces{} frontal faces the
-regional metric could score, the masked composite improved this localization
-score over the paired prompt-only output by a median of \MedPairedLocGain{}
-(95\% face-clustered bootstrap interval
-\PairedLocGainLow--\PairedLocGainHigh) while changing the requested region
-about as much. The editors differed visibly in how strongly they edited versus
-how well they preserved identity, and the one inpainting model we tested did
-not beat the simple composite. Against each face's input-to-postoperative
-baseline, no editor moved its outputs closer to the postoperative photograph in
-identity-embedding terms. This is a study of control, not of clinical
-accuracy: no surgeons rated the outputs, and each condition was generated
-once. Within that scope, the practical finding is that keeping a surgical
-preview inside its intended region needs no access to the model; a mask and
-composite on the client enforce it across every editor we tested, at low
-provider cost.
+benchmark, six commercial editing configurations and one mask-based inpainting
+model perform facelift-style jaw--neck and rhinoplasty edits at three levels of
+client-side control: the prompt alone; cutting the edited region out of the
+response and pasting it back onto the original photograph through a
+landmark-derived mask (a masked composite); and asking the model itself to
+inpaint inside the mask where supported. Of \NumAttemptedEdits{} attempted
+edits, \NumScoredEdits{} could be scored. ArcFace cosine measures identity
+preservation; a CIELAB pixel-change ratio measures how much change lands inside
+the requested region rather than a protected facial zone. On the
+\NumLocalizationFaces{} frontal faces the regional metric could score, the
+masked composite improved localization over the paired prompt-only output by a
+median of \MedPairedLocGain{} (95\% face-clustered bootstrap interval
+\PairedLocGainLow--\PairedLocGainHigh) while changing the requested region about
+as much. Editors differed in edit strength versus identity retention, and the
+one inpainting model we tested did not beat the simple composite. Against each
+face's input-to-postoperative baseline, no editor moved its outputs closer to
+the postoperative photograph in identity-embedding terms. This is a study of
+control, not clinical accuracy: no surgeons rated the outputs, and each
+condition was generated once. Within that scope, keeping a surgical preview
+inside its intended region needs no access to the model; a mask and composite on
+the client enforce it across every editor tested, at low provider cost.
